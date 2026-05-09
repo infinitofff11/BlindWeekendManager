@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>活动地点管理 - 不期周末管理后台</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+<div class="app-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo"><span class="logo-icon">🏷️</span><span>不期周末</span></div>
+    <nav class="sidebar-nav">
+      <a data-page="dashboard" href="/"><span class="nav-icon">📊</span><span class="nav-text">数据概览</span></a>
+      <a data-page="users" href="/users.html"><span class="nav-icon">👤</span><span class="nav-text">用户管理</span></a>
+      <a data-page="spots" href="/spots.html"><span class="nav-icon">📍</span><span class="nav-text">活动地点</span></a>
+      <a data-page="templates" href="/templates.html"><span class="nav-icon">📋</span><span class="nav-text">方案模板</span></a>
+      <a data-page="blindboxes" href="/blindboxes.html"><span class="nav-icon">🎁</span><span class="nav-text">盲盒管理</span></a>
+      <a data-page="reviews" href="/reviews.html"><span class="nav-icon">💬</span><span class="nav-text">评论与签到</span></a>
+    </nav>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <span class="topbar-title">📍 活动地点管理</span>
+      <div class="topbar-right">
+        <button class="btn btn-primary" onclick="openAddSpotModal()">+ 新增地点</button>
+      </div>
+    </header>
+
+    <main class="page-body">
+      <!-- Toolbar: 多条件筛选 -->
+      <div class="toolbar">
+        <input type="text" class="search-input" id="spotKeyword" placeholder="搜索名称或地址..." onkeydown="if(event.key==='Enter')loadSpots(1)">
+        <select id="spotTypeTag" onchange="loadSpots(1)">
+          <option value="">全部类型</option>
+          <option value="文艺">文艺</option><option value="美食">美食</option><option value="户外">户外</option>
+          <option value="运动">运动</option><option value="亲子">亲子</option><option value="拍照">拍照</option>
+          <option value="展览">展览</option><option value="音乐">音乐</option><option value="咖啡">咖啡</option>
+          <option value="购物">购物</option><option value="自然">自然</option><option value="探险">探险</option>
+        </select>
+        <select id="spotConsumeLevel" onchange="loadSpots(1)">
+          <option value="">消费水平</option>
+          <option value="low">经济实惠</option>
+          <option value="high">高端消费</option>
+        </select>
+        <select id="spotCity" onchange="loadSpots(1)">
+          <option value="">全部城市</option>
+          <option value="北京">北京</option><option value="上海">上海</option><option value="广州">广州</option>
+          <option value="深圳">深圳</option><option value="杭州">杭州</option><option value="成都">成都</option>
+          <option value="武汉">武汉</option><option value="南京">南京</option><option value="西安">西安</option>
+          <option value="重庆">重庆</option>
+        </select>
+        <select id="spotStatus" onchange="loadSpots(1)">
+          <option value="">全部状态</option>
+          <option value="1">正常</option>
+          <option value="0">已禁用</option>
+        </select>
+        <button class="btn btn-primary" onclick="loadSpots(1)">🔍 搜索</button>
+      </div>
+
+      <!-- Table -->
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>名称</th>
+              <th>类型标签</th>
+              <th>城市/区</th>
+              <th>人均消费</th>
+              <th>推荐时长</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="spotTableBody">
+            <tr><td colspan="8" class="empty-state"><span class="empty-icon">⏳</span>加载中...</td></tr>
+          </tbody>
+        </table>
+        <div class="pagination-wrap" id="spotPagination"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- 新增/编辑 Modal -->
+<div class="modal-overlay" id="spotFormModal">
+  <div class="modal-box wide">
+    <div class="modal-header">
+      <h3 id="spotFormTitle">新增活动地点</h3>
+      <button class="modal-close" onclick="closeModal('spotFormModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="spotForm" onsubmit="return false;">
+        <input type="hidden" id="spotId">
+        <div class="form-row">
+          <div class="form-group">
+            <label>地点名称 <span class="required">*</span></label>
+            <input type="text" class="form-control" id="sf_name" required placeholder="如：三里屯太古里">
+          </div>
+          <div class="form-group">
+            <label>所在城市</label>
+            <input type="text" class="form-control" id="sf_city" placeholder="如：北京">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>区/县</label>
+            <input type="text" class="form-control" id="sf_district" placeholder="如：朝阳区">
+          </div>
+          <div class="form-group">
+            <label>详细地址 <span class="required">*</span></label>
+            <input type="text" class="form-control" id="sf_address" required placeholder="详细地址">
+          </div>
+        </div>
+        <div class="form-row-3">
+          <div class="form-group">
+            <label>人均消费(元)</label>
+            <input type="number" class="form-control" id="sf_consumePerPerson" step="0.01" placeholder="0.00">
+          </div>
+          <div class="form-group">
+            <label>推荐时长(分钟)</label>
+            <input type="number" class="form-control" id="sf_recommendDuration" placeholder="60">
+          </div>
+          <div class="form-group">
+            <label>消费水平</label>
+            <select class="form-control" id="sf_consumeLevel">
+              <option value="low">经济实惠</option>
+              <option value="high">高端消费</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>经度</label>
+            <input type="number" class="form-control" id="sf_longitude" step="any" placeholder="116.4074">
+          </div>
+          <div class="form-group">
+            <label>纬度</label>
+            <input type="number" class="form-control" id="sf_latitude" step="any" placeholder="39.9042">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>建议时段</label>
+            <select class="form-control" id="sf_suggestTimePeriod">
+              <option value="morning">上午</option>
+              <option value="afternoon">下午</option>
+              <option value="evening">晚间</option>
+              <option value="all_day">全天</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>适合人数</label>
+            <select class="form-control" id="sf_suitableCapacity">
+              <option value="solo">单人</option>
+              <option value="small_group">小团体</option>
+              <option value="both">均可</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>类型标签 (逗号分隔)</label>
+          <input type="text" class="form-control" id="sf_typeTags" placeholder="文艺,探店,拍照">
+        </div>
+        <div class="form-group">
+          <label>封面图片URL</label>
+          <input type="text" class="form-control" id="sf_coverImageUrl" placeholder="https://...">
+        </div>
+        <div class="form-group">
+          <label>简介描述</label>
+          <textarea class="form-control" id="sf_description" rows="3" placeholder="简要介绍该地点的特色..."></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('spotFormModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveSpot()">保存</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/spots.js"></script>
+</body>
+</html>

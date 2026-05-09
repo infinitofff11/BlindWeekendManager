@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>方案模板管理 - 不期周末管理后台</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+<div class="app-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo"><span class="logo-icon">🏷️</span><span>不期周末</span></div>
+    <nav class="sidebar-nav">
+      <a data-page="dashboard" href="/"><span class="nav-icon">📊</span><span class="nav-text">数据概览</span></a>
+      <a data-page="users" href="/users.html"><span class="nav-icon">👤</span><span class="nav-text">用户管理</span></a>
+      <a data-page="spots" href="/spots.html"><span class="nav-icon">📍</span><span class="nav-text">活动地点</span></a>
+      <a data-page="templates" href="/templates.html"><span class="nav-icon">📋</span><span class="nav-text">方案模板</span></a>
+      <a data-page="blindboxes" href="/blindboxes.html"><span class="nav-icon">🎁</span><span class="nav-text">盲盒管理</span></a>
+      <a data-page="reviews" href="/reviews.html"><span class="nav-icon">💬</span><span class="nav-text">评论与签到</span></a>
+    </nav>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <span class="topbar-title">📋 方案模板管理</span>
+      <div class="topbar-right">
+        <button class="btn btn-primary" onclick="openAddTemplateModal()">+ 新增模板</button>
+      </div>
+    </header>
+
+    <main class="page-body">
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <input type="text" class="search-input" id="tplKeyword" placeholder="搜索模板名称..." onkeydown="if(event.key==='Enter')loadTemplates(1)">
+        <button class="btn btn-primary" onclick="loadTemplates(1)">🔍 搜索</button>
+      </div>
+
+      <!-- Table -->
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>名称</th>
+              <th>主题类型</th>
+              <th>总时长</th>
+              <th>消费水平</th>
+              <th>时段数</th>
+              <th>排序</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="tplTableBody">
+            <tr><td colspan="9" class="empty-state"><span class="empty-icon">⏳</span>加载中...</td></tr>
+          </tbody>
+        </table>
+        <div class="pagination-wrap" id="tplPagination"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- 新增/编辑 Modal (含时段编辑) -->
+<div class="modal-overlay" id="templateFormModal">
+  <div class="modal-box wide">
+    <div class="modal-header">
+      <h3 id="tplFormTitle">新增方案模板</h3>
+      <button class="modal-close" onclick="closeModal('templateFormModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="tplForm" onsubmit="return false;">
+        <input type="hidden" id="tplId">
+        <div class="form-row">
+          <div class="form-group">
+            <label>模板名称 <span class="required">*</span></label>
+            <input type="text" class="form-control" id="tf_name" required placeholder="如：文艺半日游">
+          </div>
+          <div class="form-group">
+            <label>主题类型</label>
+            <select class="form-control" id="tf_themeType">
+              <option value="文艺">文艺</option><option value="运动">运动</option>
+              <option value="探店">探店</option><option value="户外">户外</option>
+              <option value="技能">技能</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row-3">
+          <div class="form-group">
+            <label>总时长(分钟)</label>
+            <input type="number" class="form-control" id="tf_totalDuration" placeholder="240">
+          </div>
+          <div class="form-group">
+            <label>消费水平</label>
+            <select class="form-control" id="tf_consumeLevel">
+              <option value="low">经济实惠</option>
+              <option value="high">高端消费</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>排序权重</label>
+            <input type="number" class="form-control" id="tf_sortOrder" value="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>描述</label>
+          <textarea class="form-control" id="tf_description" rows="2" placeholder="模板描述..."></textarea>
+        </div>
+
+        <!-- 时段列表 -->
+        <hr style="margin:16px 0;border-color:#e8ecf1">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <label style="font-weight:600;font-size:13px;color:#444">时间段配置 <span class="required">*</span></label>
+          <button type="button" class="btn btn-sm btn-outline" onclick="addSegmentRow()">+ 添加时段</button>
+        </div>
+        <div class="segment-list" id="segmentList">
+          <!-- 动态生成 -->
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('templateFormModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveTemplate()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 详情 Modal (含只读时段展示) -->
+<div class="modal-overlay" id="tplDetailModal">
+  <div class="modal-box wide">
+    <div class="modal-header">
+      <h3>模板详情</h3>
+      <button class="modal-close" onclick="closeModal('tplDetailModal')">&times;</button>
+    </div>
+    <div class="modal-body" id="tplDetailContent"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('tplDetailModal')">关闭</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/templates.js"></script>
+</body>
+</html>
