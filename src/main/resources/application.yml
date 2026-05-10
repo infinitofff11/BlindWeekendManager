@@ -90,3 +90,10 @@ app:
     path: ./uploads/
     # 文件访问URL前缀（局域网访问时改为本机IP）
     access-url: http://10.213.212.236:8080/files/
+
+  # JWT 认证配置
+  jwt:
+    # JWT签名密钥（生产环境必须更换为复杂的随机字符串，至少256位）
+    secret: blind-weekend-manager-secret-key-for-jwt-signing-production-replace-this
+    # Token有效期（毫秒），24小时 = 86400000ms
+    expiration: 86400000

@@ -63,6 +63,15 @@ async function _request(url, method, body) {
   try {
     const response = await fetch(url, options);
 
+    // ========== 401 未认证拦截（Token无效/过期 → 跳转登录页） ==========
+    if (response.status === 401) {
+      console.warn('[API] Token无效或已过期，跳转到登录页');
+      localStorage.removeItem('admin_token');
+      localStorage.removeItem('admin_info');
+      window.location.href = '/login.html';
+      throw new ApiError(401, '登录已过期，请重新登录');
+    }
+
     // 处理非JSON响应（如HTML错误页面、404等）
     const contentType = response.headers.get('content-type') || '';
     if (!contentType.includes('application/json')) {

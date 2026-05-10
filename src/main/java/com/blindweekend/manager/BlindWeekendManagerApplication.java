@@ -16,7 +16,8 @@ public class BlindWeekendManagerApplication {
         SpringApplication.run(BlindWeekendManagerApplication.class, args);
         System.out.println("========================================");
         System.out.println("  不期周末管理后台启动成功!");
-        System.out.println("  访问地址: http://localhost:8080/");
+        System.out.println("  本地访问地址: http://localhost:8080/login.html");
+        System.out.println("  局域网访问地址: http://10.213.212.236:8080/login.html");
         System.out.println("========================================");
     }
 }

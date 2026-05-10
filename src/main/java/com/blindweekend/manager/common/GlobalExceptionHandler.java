@@ -1,6 +1,7 @@
 package com.blindweekend.manager.common;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -40,6 +41,15 @@ public class GlobalExceptionHandler {
     public Result<?> handleIllegalArgument(IllegalArgumentException e) {
         log.warn("非法参数: {}", e.getMessage());
         return Result.error(400, e.getMessage());
+    }
+
+    /**
+     * 处理权限不足异常（Spring Security 403）
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public Result<?> handleAccessDeniedException(AccessDeniedException e) {
+        log.warn("权限不足: {}", e.getMessage());
+        return Result.error(403, "权限不足，拒绝访问");
     }
 
     /**

@@ -5,6 +5,14 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initSidebar('dashboard');
+
+  // 显示管理员昵称
+  var adminInfo = getAdminInfo && getAdminInfo();
+  if (adminInfo && adminInfo.nickname) {
+    var el = document.getElementById('adminName');
+    if (el) el.textContent = adminInfo.nickname;
+  }
+
   loadAllStats();
 });
 
