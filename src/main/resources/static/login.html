@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 - 不期周末管理后台</title>
+  <link rel="stylesheet" href="/css/admin.css">
+  <style>
+    /* ===== 登录页专用样式 ===== */
+    .login-page {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1b3a5c 0%, #2d5a7b 100%);
+      margin: 0;
+      padding: 20px;
+    }
+    .login-container {
+      background: #fff;
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .login-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .login-header .logo-icon {
+      font-size: 48px;
+      display: block;
+      margin-bottom: 12px;
+    }
+    .login-header h1 {
+      color: #1b3a5c;
+      font-size: 28px;
+      margin: 0 0 6px;
+      font-weight: 700;
+    }
+    .login-header p {
+      color: #888;
+      font-size: 15px;
+      margin: 0;
+    }
+    .login-container .form-group {
+      margin-bottom: 22px;
+    }
+    .login-container label {
+      display: block;
+      color: #555;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+      width: 100%;
+      padding: 13px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: all 0.25s;
+      box-sizing: border-box;
+      outline: none;
+    }
+    .login-container input:focus {
+      border-color: #2d5a7b;
+      box-shadow: 0 0 0 3px rgba(45,90,123,0.10);
+    }
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #1b3a5c, #2d5a7b);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      margin-top: 8px;
+    }
+    .btn-login:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(27,58,92,0.35);
+    }
+    .btn-login:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+    .error-msg {
+      color: #dc3545;
+      background: #fdecea;
+      padding: 11px 14px;
+      border-radius: 6px;
+      font-size: 14px;
+      margin-top: 14px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="login-page">
+
+<div class="login-container">
+  <div class="login-header">
+    <span class="logo-icon">🏷️</span>
+    <h1>不期周末</h1>
+    <p>管理后台</p>
+  </div>
+
+  <form id="loginForm" onsubmit="handleLogin(event)">
+    <div class="form-group">
+      <label for="username">用户名</label>
+      <input type="text" id="username" placeholder="请输入用户名" required autocomplete="username"
+             value="admin" autofocus>
+    </div>
+
+    <div class="form-group">
+      <label for="password">密码</label>
+      <input type="password" id="password" placeholder="请输入密码" required autocomplete="current-password"
+             value="admin123">
+    </div>
+
+    <button type="submit" class="btn-login" id="btnLogin">登 录</button>
+
+    <div id="errorMsg" class="error-msg" style="display:none"></div>
+  </form>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+</body>
+</html>
