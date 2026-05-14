@@ -1,6 +1,7 @@
 package com.blindweekend.manager.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,6 +35,7 @@ public class BlindBox {
     private String district;
 
     /** 活动日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate activityDate;
 
     /** 时间段 */

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blindweekend.manager.common.BusinessException;
 import com.blindweekend.manager.common.PageResult;
 import com.blindweekend.manager.dto.BlindBoxCreateDTO;
+import com.blindweekend.manager.dto.BlindBoxUpdateDTO;
 import com.blindweekend.manager.entity.BlindBox;
 import com.blindweekend.manager.entity.BlindBoxApplication;
 import com.blindweekend.manager.mapper.BlindBoxApplicationMapper;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +44,7 @@ public class BlindBoxService {
         box.setMoodText(dto.getMoodText());
         box.setDistrict(dto.getDistrict());
         if (StringUtils.hasText(dto.getActivityDate())) {
-            box.setActivityDate(LocalDate.parse(dto.getActivityDate()));
+            box.setActivityDate(parseFlexibleDate(dto.getActivityDate()));
         }
         box.setActivityTimePeriod(dto.getActivityTimePeriod());
         box.setRequiredCount(dto.getRequiredCount());
@@ -165,6 +168,49 @@ public class BlindBoxService {
     }
 
     /**
+     * 管理员编辑盲盒信息
+     */
+    public BlindBox update(Long id, BlindBoxUpdateDTO dto) {
+        BlindBox box = getById(id);
+
+        // 只更新非空字段（部分更新语义）
+        if (StringUtils.hasText(dto.getTitle())) {
+            box.setTitle(dto.getTitle());
+        }
+        if (dto.getSummaryText() != null) {
+            box.setSummaryText(dto.getSummaryText());
+        }
+        if (dto.getMoodText() != null) {
+            box.setMoodText(dto.getMoodText());
+        }
+        if (dto.getDistrict() != null) {
+            box.setDistrict(dto.getDistrict());
+        }
+        if (StringUtils.hasText(dto.getActivityDate())) {
+            box.setActivityDate(parseFlexibleDate(dto.getActivityDate()));
+        } else if (dto.getActivityDate() != null && dto.getActivityDate().isEmpty()) {
+            // 传空字符串则清空日期
+            box.setActivityDate(null);
+        }
+        if (dto.getActivityTimePeriod() != null) {
+            box.setActivityTimePeriod(dto.getActivityTimePeriod());
+        }
+        if (dto.getRequiredCount() != null) {
+            box.setRequiredCount(dto.getRequiredCount());
+        }
+        if (StringUtils.hasText(dto.getStatus())) {
+            box.setStatus(dto.getStatus());
+        }
+        if (dto.getActivityTypeTags() != null) {
+            box.setActivityTypeTags(dto.getActivityTypeTags());
+        }
+
+        blindBoxMapper.updateById(box);
+        log.info("管理员编辑盲盒: id={}, title={}", id, dto.getTitle());
+        return box;
+    }
+
+    /**
      * 获取盲盒统计
      */
     public java.util.Map<String, Object> getStats() {
@@ -229,5 +275,40 @@ public class BlindBoxService {
                 "participatedCount", participatedCount,
                 "publishedCount", publishedCount
         );
+    }
+
+    /**
+     * 灵活日期解析 —— 支持多种常见格式
+     * 优先级：yyyy-MM-dd > yyyy.MM.dd > yyyy/MM/dd > MM.dd（补当年份）> MM/dd（补当年份）
+     * 全部失败则抛出友好异常
+     */
+    private LocalDate parseFlexibleDate(String dateStr) {
+        // 常见格式列表
+        DateTimeFormatter[] formatters = {
+            DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+            DateTimeFormatter.ofPattern("yyyy.MM.dd"),
+            DateTimeFormatter.ofPattern("yyyy/MM/dd"),
+            DateTimeFormatter.ofPattern("MM.dd"),
+            DateTimeFormatter.ofPattern("MM/dd")
+        };
+
+        // 先尝试带年份的四段式格式
+        for (int i = 0; i < 3; i++) {
+            try {
+                return LocalDate.parse(dateStr, formatters[i]);
+            } catch (DateTimeParseException ignored) { }
+        }
+
+        // 再尝试只有月日的短格式，自动补当年份
+        for (int i = 3; i < formatters.length; i++) {
+            try {
+                LocalDate parsed = LocalDate.parse(dateStr, formatters[i]);
+                return parsed.withYear(java.time.Year.now().getValue());
+            } catch (DateTimeParseException ignored) { }
+        }
+
+        // 全部失败，返回友好错误信息
+        throw new BusinessException(400,
+            "日期格式错误：「" + dateStr + "」无法识别。请使用 yyyy-MM-dd 格式（如 2025-10-01）");
     }
 }

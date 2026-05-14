@@ -33,7 +33,7 @@ async function loadBlindBoxes(page) {
 
     const data = await apiGet('/blindboxes', params);
     renderBoxTable(data.list || []);
-    renderPagination('boxPagination', data, 'loadBlindBoxes');
+    renderPagination('boxPagination', data, 'loadBlindBoxes', page);
   } catch (e) {
     if (!(e instanceof ApiError)) tbody.innerHTML = emptyTable(9);
   }
@@ -57,8 +57,8 @@ function renderBoxTable(list) {
         <td>${b.view_count || 0}</td>
         <td style="font-size:12px;color:#888">${formatDateTime(b.created_at)}</td>
         <td><div class="action-btns">
+          <button class="btn btn-sm btn-primary" onclick="openEditBoxModal(${b.id})">✏️ 编辑</button>
           <button class="btn btn-sm btn-outline" onclick="viewBoxDetail(${b.id})">详情</button>
-          <button class="btn btn-sm btn-warning" onclick="openStatusModal(${b.id},'${b.status}')">改状态</button>
           <button class="btn btn-sm btn-link btn-link-danger" onclick="deleteBox(${b.id})">删除</button>
         </div></td>
       </tr>`;
@@ -124,4 +124,63 @@ function deleteBox(id) {
       }
     }
   );
+}
+
+// ====== 编辑 ======
+async function openEditBoxModal(id) {
+  try {
+    const box = await apiGet('/blindboxes/' + id);
+    document.getElementById('editBoxId').value = box.id;
+    document.getElementById('editBoxTitle').value = box.title || '';
+    document.getElementById('editBoxDistrict').value = box.district || '';
+    document.getElementById('editBoxMoodText').value = box.mood_text || '';
+    document.getElementById('editBoxTimePeriod').value = box.activity_time_period || '';
+    document.getElementById('editBoxRequiredCount').value = box.required_count || 2;
+    document.getElementById('editBoxStatus').value = box.status || 'open';
+
+    // 处理日期：将后端返回的 LocalDate 格式填入 date input
+    const dateInput = document.getElementById('editBoxActivityDate');
+    if (box.activity_date) {
+      // activity_date 可能是 "2025-10-01" 格式或 Date 对象
+      const d = new Date(box.activity_date);
+      if (!isNaN(d.getTime())) {
+        dateInput.value = d.toISOString().split('T')[0];
+      } else {
+        dateInput.value = box.activity_date;
+      }
+    } else {
+      dateInput.value = '';
+    }
+
+    openModal('boxEditModal');
+  } catch (e) {
+    console.error('加载盲盒详情失败:', e);
+  }
+}
+
+async function saveBoxEdit() {
+  const id = document.getElementById('editBoxId').value;
+  const payload = {
+    title: document.getElementById('editBoxTitle').value.trim(),
+    district: document.getElementById('editBoxDistrict').value.trim(),
+    moodText: document.getElementById('editBoxMoodText').value.trim(),
+    activityTimePeriod: document.getElementById('editBoxTimePeriod').value.trim(),
+    requiredCount: parseInt(document.getElementById('editBoxRequiredCount').value) || 2,
+    status: document.getElementById('editBoxStatus').value,
+    activityDate: document.getElementById('editBoxActivityDate').value || null
+  };
+
+  if (!payload.title) {
+    showToast('标题不能为空', 'warning');
+    return;
+  }
+
+  try {
+    await apiPut(`/blindboxes/${id}`, payload);
+    showToast('盲盒已更新');
+    closeModal('boxEditModal');
+    loadBlindBoxes(boxPage);
+  } catch (e) {
+    console.error('保存盲盒失败:', e);
+  }
 }

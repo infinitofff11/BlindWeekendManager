@@ -90,6 +90,58 @@
   </div>
 </div>
 
+<!-- 编辑盲盒 Modal -->
+<div class="modal-overlay" id="boxEditModal">
+  <div class="modal-box wide">
+    <div class="modal-header">
+      <h3>编辑盲盒</h3>
+      <button class="modal-close" onclick="closeModal('boxEditModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editBoxId">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group">
+          <label class="form-label">标题 <span style="color:red">*</span></label>
+          <input type="text" class="form-control" id="editBoxTitle" placeholder="盲盒标题">
+        </div>
+        <div class="form-group">
+          <label class="form-label">地区</label>
+          <input type="text" class="form-control" id="editBoxDistrict" placeholder="如：天河区">
+        </div>
+        <div class="form-group">
+          <label class="form-label">活动日期</label>
+          <input type="date" class="form-control" id="editBoxActivityDate">
+        </div>
+        <div class="form-group">
+          <label class="form-label">时间段</label>
+          <input type="text" class="form-control" id="editBoxTimePeriod" placeholder="如：下午2点-5点">
+        </div>
+        <div class="form-group">
+          <label class="form-label">需要人数</label>
+          <input type="number" class="form-control" id="editBoxRequiredCount" min="1" max="50">
+        </div>
+        <div class="form-group">
+          <label class="form-label">状态</label>
+          <select class="form-control" id="editBoxStatus">
+            <option value="open">招募中</option>
+            <option value="full">已满员</option>
+            <option value="closed">已关闭</option>
+            <option value="cancelled">已取消</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:8px">
+        <label class="form-label">心情文案</label>
+        <textarea class="form-control" id="editBoxMoodText" rows="2" placeholder="想说的话..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('boxEditModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveBoxEdit()">💾 保存修改</button>
+    </div>
+  </div>
+</div>
+
 <!-- 状态变更 Modal -->
 <div class="modal-overlay" id="boxStatusModal">
   <div class="modal-box" style="max-width:420px">

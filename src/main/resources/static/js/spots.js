@@ -31,7 +31,7 @@ async function loadSpots(page) {
 
     const data = await apiGet('/spots', params);
     renderSpotTable(data.list || []);
-    renderPagination('spotPagination', data, 'loadSpots');
+    renderPagination('spotPagination', data, 'loadSpots', page);
   } catch (e) {
     if (!(e instanceof ApiError)) {
       tbody.innerHTML = emptyTable(8);

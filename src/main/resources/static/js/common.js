@@ -26,13 +26,24 @@ function showToast(message, type = 'success', duration = 2500) {
 }
 
 /* ===== 分页器组件 ===== */
-function renderPagination(containerId, pageData, onPageChange) {
+/**
+ * @param {string} containerId   分页容器 DOM id
+ * @param {Object} pageData     后端返回的分页数据 { pageNum, pageSize, total, pages, list }
+ * @param {string} onPageChange 翻页回调函数名（字符串）
+ * @param {number} [forcePage]  强制指定当前页码（优先级高于 pageData.pageNum）
+ */
+function renderPagination(containerId, pageData, onPageChange, forcePage) {
   const el = document.getElementById(containerId);
   if (!el) return;
 
-  const { pageNum, pageSize, total, pages } = pageData;
-  const start = (pageNum - 1) * pageSize + 1;
-  const end = Math.min(pageNum * pageSize, total);
+  // 防御性取值：兼容不同后端返回格式，避免 undefined 导致 NaN
+  const pageNum = (forcePage != null ? forcePage : Number(pageData.pageNum)) || 1;
+  const pageSize = Number(pageData.pageSize) || 10;
+  const total = Number(pageData.total) || 0;
+  const pages = Number(pageData.pages) || Math.max(1, Math.ceil(total / pageSize));
+
+  const start = total > 0 ? (pageNum - 1) * pageSize + 1 : 0;
+  const end = total > 0 ? Math.min(pageNum * pageSize, total) : 0;
 
   let html = `
     <div class="pagination-info">

@@ -24,7 +24,7 @@ async function loadUsers(page) {
 
     const data = await apiGet('/users', params);
     renderUserTable(data.list || []);
-    renderPagination('userPagination', data, 'loadUsers');
+    renderPagination('userPagination', data, 'loadUsers', page);
   } catch (e) {
     if (!(e instanceof ApiError)) {
       tbody.innerHTML = emptyTable(8);

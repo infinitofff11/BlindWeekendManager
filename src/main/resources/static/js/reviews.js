@@ -28,7 +28,7 @@ async function loadCheckins(page) {
   try {
     const data = await apiGet('/reviews/checkins', { pageNum: page, pageSize: 10 });
     renderCheckinTable(data.list || []);
-    renderPagination('checkinPagination', data, 'loadCheckins');
+    renderPagination('checkinPagination', data, 'loadCheckins', page);
   } catch (e) {
     if (!(e instanceof ApiError)) tbody.innerHTML = emptyTable(8);
   }
@@ -69,7 +69,7 @@ async function loadReviews(page) {
 
     const data = await apiGet('/reviews', params);
     renderReviewTable(data.list || []);
-    renderPagination('reviewPagination', data, 'loadReviews');
+    renderPagination('reviewPagination', data, 'loadReviews', page);
   } catch (e) {
     if (!(e instanceof ApiError)) tbody.innerHTML = emptyTable(7);
   }

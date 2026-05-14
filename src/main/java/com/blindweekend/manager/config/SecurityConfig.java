@@ -76,6 +76,14 @@ public class SecurityConfig {
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/admin/blindboxes", "/admin/blindboxes/*/join").permitAll()
 
+                // ⭐ Android 用户个人盲盒记录（/admin/blindboxes/user/{userId}/... 有多级路径，* 无法匹配）
+                .requestMatchers(
+                    HttpMethod.GET,
+                    "/admin/blindboxes/user/*/participated",
+                    "/admin/blindboxes/user/*/published",
+                    "/admin/blindboxes/user/*/stats"
+                ).permitAll()
+
                 // 静态资源：公开（前端 JS 自行做 token 校验）
                 .requestMatchers(
                     "/",                    // 根路径 → index.html

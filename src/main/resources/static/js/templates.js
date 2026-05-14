@@ -24,7 +24,7 @@ async function loadTemplates(page) {
 
     const data = await apiGet('/templates', params);
     renderTplTable(data.list || []);
-    renderPagination('tplPagination', data, 'loadTemplates');
+    renderPagination('tplPagination', data, 'loadTemplates', page);
   } catch (e) {
     if (!(e instanceof ApiError)) tbody.innerHTML = emptyTable(9);
   }

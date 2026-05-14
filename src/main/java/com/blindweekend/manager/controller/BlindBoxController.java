@@ -3,6 +3,7 @@ package com.blindweekend.manager.controller;
 import com.blindweekend.manager.common.PageResult;
 import com.blindweekend.manager.common.Result;
 import com.blindweekend.manager.dto.BlindBoxCreateDTO;
+import com.blindweekend.manager.dto.BlindBoxUpdateDTO;
 import com.blindweekend.manager.entity.BlindBox;
 import com.blindweekend.manager.service.BlindBoxService;
 import jakarta.validation.Valid;
@@ -52,6 +53,17 @@ public class BlindBoxController {
     @GetMapping("/{id}")
     public Result<BlindBox> detail(@PathVariable Long id) {
         return Result.success(blindBoxService.getById(id));
+    }
+
+    /**
+     * 管理员编辑盲盒
+     */
+    @PutMapping("/{id}")
+    public Result<BlindBox> update(@PathVariable Long id,
+                                    @RequestBody @Valid BlindBoxUpdateDTO dto) {
+        log.info("管理员编辑盲盒: id={}, title={}", id, dto.getTitle());
+        BlindBox box = blindBoxService.update(id, dto);
+        return Result.success("盲盒已更新", box);
     }
 
     /**
