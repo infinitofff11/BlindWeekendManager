@@ -197,10 +197,15 @@ public class ActivitySpotService {
 
     /**
      * 获取活动点统计信息
+     * @param status 状态过滤（null=统计全部，1=启用，0=禁用）
      */
     public long countByStatus(Integer status) {
-        return activitySpotMapper.selectCount(
-                new LambdaQueryWrapper<ActivitySpot>().eq(ActivitySpot::getStatus, status)
-        );
+        LambdaQueryWrapper<ActivitySpot> wrapper = new LambdaQueryWrapper<>();
+        // ⚠️ status=null 时不加条件，否则 .eq(field, null) 会生成
+        //   WHERE status = NULL → SQL 中 =NULL 永远为假，返回 0
+        if (status != null) {
+            wrapper.eq(ActivitySpot::getStatus, status);
+        }
+        return activitySpotMapper.selectCount(wrapper);
     }
 }
