@@ -15,14 +15,16 @@ async function loadBoxStats() {
     const stats = await apiGet('/blindboxes/stats');
     document.getElementById('boxStatTotal').textContent = stats.total || 0;
     document.getElementById('boxStatOpen').textContent = stats.open || 0;
-  } catch (e) {}
+  } catch (e) {
+    console.error('加载盲盒统计失败:', e);
+  }
 }
 
 // ====== 加载列表 ======
 async function loadBlindBoxes(page) {
   boxPage = page;
   const tbody = document.getElementById('boxTableBody');
-  tbody.innerHTML = `<tr><td colspan="9" class="loading-spinner"><div class="spinner"></div>加载中...</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="10" class="loading-spinner"><div class="spinner"></div>加载中...</td></tr>`;
 
   try {
     const params = { pageNum: page, pageSize: 10 };
@@ -35,23 +37,24 @@ async function loadBlindBoxes(page) {
     renderBoxTable(data.list || []);
     renderPagination('boxPagination', data, 'loadBlindBoxes', page);
   } catch (e) {
-    if (!(e instanceof ApiError)) tbody.innerHTML = emptyTable(9);
+    if (!(e instanceof ApiError)) tbody.innerHTML = emptyTable(10);
   }
 }
 
 function renderBoxTable(list) {
   const tbody = document.getElementById('boxTableBody');
-  if (!list.length) { tbody.innerHTML = emptyTable(9); return; }
+  if (!list.length) { tbody.innerHTML = emptyTable(10); return; }
 
   let html = '';
   for (const b of list) {
     html += `
       <tr>
         <td>${b.id}</td>
-        <td><strong>${b.title}</strong>
-          ${b.summary_text ? `<br><small style="color:#888">${b.summary_text}</small>` : ''}</td>
-        <td>${b.district || '-'}</td>
-        <td>${formatDate(b.activity_date)}<br><small style="color:#888">${b.activity_time_period || ''}</small></td>
+        <td><strong>${escapeHtml(b.title)}</strong>
+          ${b.summary_text ? `<br><small style="color:#888">${escapeHtml(b.summary_text)}</small>` : ''}</td>
+        <td>${escapeHtml(b.city || '-')}</td>
+        <td>${escapeHtml(b.district || '-')}</td>
+        <td>${formatDate(b.activity_date)}<br><small style="color:#888">${escapeHtml(b.activity_time_period || '')}</small></td>
         <td>${b.current_count || 0} / ${b.required_count || 1}</td>
         <td>${renderBlindBoxStatus(b.status)}</td>
         <td>${b.view_count || 0}</td>
@@ -75,6 +78,7 @@ async function viewBoxDetail(id) {
       ['标题', box.title],
       ['摘要', box.summary_text || '-'],
       ['心情语', box.mood_text || '-'],
+      ['城市', box.city || '-'],
       ['地区', box.district || '-'],
       ['活动日期', formatDate(box.activity_date)],
       ['时间段', box.activity_time_period || '-'],
@@ -85,7 +89,10 @@ async function viewBoxDetail(id) {
       ['发布者ID', box.publisher_id || '-'],
       ['创建时间', formatDateTime(box.created_at)],
     ]);
-  } catch (e) {}
+  } catch (e) {
+    console.error('加载盲盒详情失败:', e);
+    showToast('加载盲盒详情失败', 'error');
+  }
 }
 
 // ====== 状态变更 ======
@@ -132,6 +139,7 @@ async function openEditBoxModal(id) {
     const box = await apiGet('/blindboxes/' + id);
     document.getElementById('editBoxId').value = box.id;
     document.getElementById('editBoxTitle').value = box.title || '';
+    document.getElementById('editBoxCity').value = box.city || '';
     document.getElementById('editBoxDistrict').value = box.district || '';
     document.getElementById('editBoxMoodText').value = box.mood_text || '';
     document.getElementById('editBoxTimePeriod').value = box.activity_time_period || '';
@@ -162,6 +170,7 @@ async function saveBoxEdit() {
   const id = document.getElementById('editBoxId').value;
   const payload = {
     title: document.getElementById('editBoxTitle').value.trim(),
+    city: document.getElementById('editBoxCity').value.trim(),
     district: document.getElementById('editBoxDistrict').value.trim(),
     moodText: document.getElementById('editBoxMoodText').value.trim(),
     activityTimePeriod: document.getElementById('editBoxTimePeriod').value.trim(),

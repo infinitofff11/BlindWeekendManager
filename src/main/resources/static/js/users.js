@@ -44,9 +44,9 @@ function renderUserTable(users) {
     html += `
       <tr>
         <td>${u.id}</td>
-        <td><strong>${u.nickname || '-'}</strong></td>
+        <td><strong>${escapeHtml(u.nickname || '-')}</strong></td>
         <td>${maskPhone(u.phone)}</td>
-        <td>${u.city || '-'}</td>
+        <td>${escapeHtml(u.city || '-')}</td>
         <td>${renderStatusBadge(u.status)}</td>
         <td style="font-size:12px;color:#888">${formatDate(u.createdAt)}</td>
         <td style="font-size:12px;color:#888">${formatDateTime(u.lastLoginTime)}</td>
@@ -74,7 +74,10 @@ async function viewUserDetail(id) {
       ['注册时间', formatDateTime(user.createdAt)],
       ['最后登录', formatDateTime(user.lastLoginTime)],
     ]);
-  } catch (e) {}
+  } catch (e) {
+    console.error('加载用户详情失败:', e);
+    showToast('加载用户详情失败', 'error');
+  }
 }
 
 async function toggleUserStatus(id, newStatus) {

@@ -45,11 +45,11 @@ function renderCheckinTable(list) {
       <tr>
         <td>${c.id}</td>
         <td>${c.userId || '-'}</td>
-        <td><span class="tag-chip">${c.targetType || '-'}</span></td>
+        <td><span class="tag-chip">${escapeHtml(c.targetType || '-')}</span></td>
         <td>${c.targetId || '-'}</td>
         <td>${c.rating ? '⭐'.repeat(c.rating) + '☆'.repeat(5 - c.rating) : '-'}</td>
         <td style="text-align:center">${photoCount} 张</td>
-        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.shortReview || '-'}</td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(c.shortReview || '-')}</td>
         <td style="font-size:12px;color:#888;white-space:nowrap">${formatDateTime(c.checkInTime)}</td>
       </tr>`;
   }
@@ -85,7 +85,7 @@ function renderReviewTable(list) {
       <tr>
         <td>${r.id}</td>
         <td>${r.spotId || '-'}</td>
-        <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.content || '-'}</td>
+        <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(r.content || '-')}</td>
         <td>${r.rating ? '⭐'.repeat(r.rating) + '☆'.repeat(5 - r.rating) : '-'}</td>
         <td>${renderStatusBadge(r.status)}</td>
         <td style="font-size:12px;color:#888;white-space:nowrap">${formatDateTime(r.createdAt)}</td>

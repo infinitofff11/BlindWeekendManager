@@ -89,7 +89,7 @@ function showConfirm(message, onConfirm) {
     <div class="modal-box" style="max-width:420px">
       <div class="modal-header"><h3>确认操作</h3><button class="modal-close" onclick="closeConfirm()">&times;</button></div>
       <div class="modal-body">
-        <p class="confirm-msg">${message}</p>
+        <p class="confirm-msg">${escapeHtml(message)}</p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline" onclick="closeConfirm()">取消</button>
@@ -116,13 +116,13 @@ function showDetailModal(title, fields) {
 
   let gridHtml = '';
   for (const [label, value] of fields) {
-    const v = value !== undefined && value !== null && value !== '' ? value : '-';
-    gridHtml += `<div class="detail-label">${label}</div><div class="detail-value">${v}</div>`;
+    const v = value !== undefined && value !== null && value !== '' ? escapeHtml(value) : '-';
+    gridHtml += `<div class="detail-label">${escapeHtml(label)}</div><div class="detail-value">${v}</div>`;
   }
 
   overlay.innerHTML = `
     <div class="modal-box" style="max-width:560px">
-      <div class="modal-header"><h3>${title}</h3><button class="modal-close" onclick="closeDetailModal()">&times;</button></div>
+      <div class="modal-header"><h3>${escapeHtml(title)}</h3><button class="modal-close" onclick="closeDetailModal()">&times;</button></div>
       <div class="modal-body">
         <div class="detail-grid">${gridHtml}</div>
       </div>
@@ -147,6 +147,17 @@ function initSidebar(activeKey) {
 /* ===== 表格空状态 ===== */
 function emptyTable(colspan = 6) {
   return `<tr><td colspan="${colspan}" class="empty-state"><span class="empty-icon">📭</span>暂无数据</td></tr>`;
+}
+
+/* ===== HTML 转义（防 XSS） ===== */
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 /* ===== 工具函数 ===== */
@@ -216,7 +227,7 @@ function renderTags(tagStrOrArray) {
     }
   }
   if (!tags.length) return '<span class="badge badge-default">-</span>';
-  return tags.map(t => `<span class="tag-chip">${t}</span>`).join('');
+  return tags.map(t => `<span class="tag-chip">${escapeHtml(t)}</span>`).join('');
 }
 
 // 状态映射

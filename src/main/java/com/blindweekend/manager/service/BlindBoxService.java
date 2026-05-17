@@ -42,6 +42,7 @@ public class BlindBoxService {
         box.setTitle(dto.getTitle());
         box.setSummaryText(dto.getSummaryText());
         box.setMoodText(dto.getMoodText());
+        box.setCity(dto.getCity());
         box.setDistrict(dto.getDistrict());
         if (StringUtils.hasText(dto.getActivityDate())) {
             box.setActivityDate(parseFlexibleDate(dto.getActivityDate()));
@@ -112,10 +113,12 @@ public class BlindBoxService {
     }
 
     /**
-     * 分页查询盲盒列表
+     * 分页查询盲盒列表（支持筛选）
      */
     public PageResult<BlindBox> queryPage(Integer pageNum, Integer pageSize,
-                                           String keyword, String status) {
+                                           String keyword, String status,
+                                           String city, String district,
+                                           String timePeriod, String tags) {
         LambdaQueryWrapper<BlindBox> wrapper = new LambdaQueryWrapper<>();
 
         if (StringUtils.hasText(keyword)) {
@@ -123,6 +126,24 @@ public class BlindBoxService {
         }
         if (StringUtils.hasText(status)) {
             wrapper.eq(BlindBox::getStatus, status);
+        }
+        if (StringUtils.hasText(city)) {
+            wrapper.eq(BlindBox::getCity, city);
+        }
+        if (StringUtils.hasText(district)) {
+            wrapper.eq(BlindBox::getDistrict, district);
+        }
+        if (StringUtils.hasText(timePeriod)) {
+            wrapper.eq(BlindBox::getActivityTimePeriod, timePeriod);
+        }
+        if (StringUtils.hasText(tags)) {
+            // tags为逗号分隔的标签列表，使用LIKE匹配JSON数组中的每个标签
+            for (String tag : tags.split(",")) {
+                String trimmed = tag.trim();
+                if (!trimmed.isEmpty()) {
+                    wrapper.like(BlindBox::getActivityTypeTags, trimmed);
+                }
+            }
         }
 
         wrapper.orderByDesc(BlindBox::getCreatedAt);
@@ -182,6 +203,9 @@ public class BlindBoxService {
         }
         if (dto.getMoodText() != null) {
             box.setMoodText(dto.getMoodText());
+        }
+        if (dto.getCity() != null) {
+            box.setCity(dto.getCity());
         }
         if (dto.getDistrict() != null) {
             box.setDistrict(dto.getDistrict());

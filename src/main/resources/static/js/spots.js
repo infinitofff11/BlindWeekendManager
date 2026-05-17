@@ -48,9 +48,9 @@ function renderSpotTable(spots) {
     html += `
       <tr>
         <td>${s.id}</td>
-        <td><strong>${s.name}</strong></td>
+        <td><strong>${escapeHtml(s.name)}</strong></td>
         <td>${renderTags(s.typeTags)}</td>
-        <td>${s.city || '-'}/${s.district || '-'}</td>
+        <td>${escapeHtml(s.city || '-')}/${escapeHtml(s.district || '-')}</td>
         <td>${s.consumePerPerson != null ? '¥' + s.consumePerPerson : '-'}</td>
         <td>${s.recommendDuration ? s.recommendDuration + '分钟' : '-'}</td>
         <td>${renderStatusBadge(s.status)}</td>
@@ -100,7 +100,10 @@ async function openEditSpotModal(id) {
     document.getElementById('sf_description').value = spot.description || '';
 
     openModal('spotFormModal');
-  } catch (e) {}
+  } catch (e) {
+    console.error('加载地点详情失败:', e);
+    showToast('加载地点详情失败', 'error');
+  }
 }
 
 // ====== 保存(新增/编辑) ======
@@ -162,7 +165,10 @@ async function viewSpotDetail(id) {
       ['状态', s.status === 1 ? '正常' : '已禁用'],
       ['创建时间', formatDateTime(s.createdAt)],
     ]);
-  } catch (e) {}
+  } catch (e) {
+    console.error('查看地点详情失败:', e);
+    showToast('加载详情失败', 'error');
+  }
 }
 
 // ====== 启用/禁用 ======

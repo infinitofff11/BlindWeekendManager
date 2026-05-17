@@ -31,6 +31,9 @@ public class BlindBox {
     /** 心情文案 */
     private String moodText;
 
+    /** 所在城市 */
+    private String city;
+
     /** 大致区域 */
     private String district;
 

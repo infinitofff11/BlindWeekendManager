@@ -1,9 +1,19 @@
 /**
  * API 请求封装模块
- * 统一 fetch 调用、错误处理、Token 管理
+ * 统一 fetch 调用、错误处理、Token 管理、CSRF 防护
  */
 
 const API_BASE = '/admin';
+const CSRF_COOKIE_NAME = 'XSRF-TOKEN';
+const CSRF_HEADER_NAME = 'X-XSRF-TOKEN';
+
+/**
+ * 从 Cookie 中读取指定名称的值（用于 CSRF Double Submit Cookie）
+ */
+function getCsrfTokenFromCookie() {
+  const match = document.cookie.match(new RegExp('(^| )' + CSRF_COOKIE_NAME + '=([^;]+)'));
+  return match ? match[2] : null;
+}
 
 /**
  * 发送 GET 请求
@@ -50,10 +60,16 @@ async function _request(url, method, body) {
     },
   };
 
-  // 从 localStorage 读取 token
-  const token = localStorage.getItem('admin_token');
-  if (token) {
-    options.headers['Authorization'] = 'Bearer ' + token;
+  // JWT Token 已通过 HttpOnly Cookie 自动携带（浏览器行为，JS无法读取）
+  // 此处不再需要从 localStorage 读取 token 并设置 Authorization Header
+  // Android 客户端仍使用 Authorization Header 方式，由后端 JwtAuthenticationFilter 兼容
+
+  // CSRF 防护：写操作（POST/PUT/DELETE）自动附加 X-XSRF-TOKEN Header
+  if (method === 'POST' || method === 'PUT' || method === 'DELETE') {
+    const csrfToken = getCsrfTokenFromCookie();
+    if (csrfToken) {
+      options.headers[CSRF_HEADER_NAME] = csrfToken;
+    }
   }
 
   if (body && (method === 'POST' || method === 'PUT')) {
@@ -66,7 +82,8 @@ async function _request(url, method, body) {
     // ========== 401 未认证拦截（Token无效/过期 → 跳转登录页） ==========
     if (response.status === 401) {
       console.warn('[API] Token无效或已过期，跳转到登录页');
-      localStorage.removeItem('admin_token');
+      // 清除前端认证状态标记
+      document.cookie = 'admin_auth_status=; Path=/; SameSite=Strict; Max-Age=0';
       localStorage.removeItem('admin_info');
       window.location.href = '/login.html';
       throw new ApiError(401, '登录已过期，请重新登录');

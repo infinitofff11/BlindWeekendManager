@@ -1,10 +1,16 @@
 /**
  * 认证管理模块
- * 负责：登录、登出、Token 管理、认证守卫
+ * 负责：登录、登出、认证守卫
+ *
+ * 安全架构：
+ * - JWT Token 通过 HttpOnly Cookie 传递（浏览器自动携带，JS 无法读取，防 XSS）
+ * - 认证状态通过 admin_auth_status Cookie 检测（非 HttpOnly，供前端 guard 使用）
+ * - CSRF 防护通过 XSRF-TOKEN Cookie + X-XSRF-TOKEN Header（Double Submit Cookie）
  */
 
-const AUTH_KEY = 'admin_token';
+const AUTH_STATUS_COOKIE = 'admin_auth_status';
 const LOGIN_URL = '/admin/auth/login';
+const LOGOUT_URL = '/admin/auth/logout';
 
 // ========== 登录功能 ==========
 
@@ -38,8 +44,10 @@ async function handleLogin(event) {
     const result = await response.json();
 
     if (result.code === 200 && result.data) {
-      // 登录成功：保存 token 到 localStorage
-      localStorage.setItem(AUTH_KEY, result.data.token);
+      // 登录成功：
+      // - JWT Token 已通过 Set-Cookie (HttpOnly) 自动设置，无需手动存储
+      // - admin_auth_status Cookie 也已自动设置
+      // - CSRF Token (XSRF-TOKEN) Cookie 也已自动设置
 
       // 保存管理员信息（用于顶部栏显示昵称）
       if (result.data.admin) {
@@ -63,17 +71,36 @@ async function handleLogin(event) {
 
 // ========== 登出功能 ==========
 
-function logout() {
-  localStorage.removeItem(AUTH_KEY);
+async function logout() {
+  try {
+    // 调用后端登出接口，清除 HttpOnly Cookie
+    // 需要附带 CSRF Token（写操作）
+    const csrfToken = getCsrfTokenFromCookie();
+    const headers = { 'Content-Type': 'application/json' };
+    if (csrfToken) {
+      headers['X-XSRF-TOKEN'] = csrfToken;
+    }
+    await fetch(LOGOUT_URL, { method: 'POST', headers });
+  } catch (e) {
+    console.warn('调用登出接口失败，继续前端清理:', e);
+  }
+
+  // 前端清理：清除认证状态 Cookie 和管理员信息
+  document.cookie = 'admin_auth_status=; Path=/; SameSite=Strict; Max-Age=0';
+  document.cookie = 'XSRF-TOKEN=; Path=/; SameSite=Strict; Max-Age=0';
   localStorage.removeItem('admin_info');
   window.location.href = '/login.html';
 }
 
 // ========== 认证守卫 ==========
 
+/**
+ * 检查认证状态
+ * 通过 admin_auth_status Cookie 检测（该 Cookie 由后端登录时设置，非 HttpOnly）
+ */
 function checkAuth() {
-  const token = localStorage.getItem(AUTH_KEY);
-  if (!token) {
+  const match = document.cookie.match(new RegExp('(^| )' + AUTH_STATUS_COOKIE + '=([^;]+)'));
+  if (!match) {
     // 未登录，跳转到登录页
     window.location.href = '/login.html';
     return false;
@@ -83,19 +110,21 @@ function checkAuth() {
 
 /**
  * 页面初始化时自动执行守卫检查 + 显示管理员昵称
- * - 非登录页面且无 token → 跳转登录页
- * - 已在登录页且有 token → 直接跳转首页
+ * - 非登录页面且无认证 Cookie → 跳转登录页
+ * - 已在登录页且有认证 Cookie → 直接跳转首页
  */
 function initAuthGuard() {
   var isLoginPage = window.location.pathname.endsWith('login.html');
+  var isAuthenticated = document.cookie.match(new RegExp('(^| )' + AUTH_STATUS_COOKIE + '=([^;]+)'));
 
-  if (!isLoginPage && !checkAuth()) {
-    // checkAuth 会自动跳转
+  if (!isLoginPage && !isAuthenticated) {
+    // 未登录，跳转
+    window.location.href = '/login.html';
     return;
   }
 
-  // 如果已在登录页且有有效 token，直接跳转首页
-  if (isLoginPage && localStorage.getItem(AUTH_KEY)) {
+  // 如果已在登录页且已登录，直接跳转首页
+  if (isLoginPage && isAuthenticated) {
     window.location.href = '/';
     return;
   }

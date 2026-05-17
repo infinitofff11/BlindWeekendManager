@@ -31,6 +31,11 @@ public class BlindBoxCreateDTO {
     @Size(max = 200, message = "心情文案最长200个字符")
     private String moodText;
 
+    /** 所在城市 */
+    @NotBlank(message = "城市不能为空")
+    @Size(max = 20, message = "城市最长20个字符")
+    private String city;
+
     /** 大致区域 */
     @Size(max = 20, message = "区域最长20个字符")
     private String district;

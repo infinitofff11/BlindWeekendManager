@@ -21,7 +21,7 @@ import org.springframework.web.cors.CorsUtils;
 /**
  * Spring Security 配置类
  * - JWT Stateless 认证模式
- * - 禁用 CSRF / Session
+ * - Double Submit Cookie CSRF 防护
  * - 静态资源公开，API 需认证
  */
 @Configuration
@@ -31,11 +31,12 @@ import org.springframework.web.cors.CorsUtils;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CsrfFilter csrfFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            // 1. 禁用 CSRF（JWT 无状态机制不需要）
+            // 1. 禁用 Spring 内置 CSRF（使用自定义 Double Submit Cookie 模式替代）
             .csrf(AbstractHttpConfigurer::disable)
 
             // 2. 使用 Stateless 会话策略（不创建/使用 Session）
@@ -48,6 +49,8 @@ public class SecurityConfig {
 
             // 4. 在用户名密码过滤器之前插入 JWT 过滤器
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            // 5. 在 JWT 过滤器之后插入 CSRF 过滤器（Double Submit Cookie 模式）
+            .addFilterAfter(csrfFilter, JwtAuthenticationFilter.class)
 
             // 5. 配置 URL 权限规则
             .authorizeHttpRequests(auth -> auth

@@ -39,8 +39,8 @@ function renderTplTable(list) {
     html += `
       <tr>
         <td>${t.id}</td>
-        <td><strong>${t.name}</strong></td>
-        <td><span class="tag-chip">${t.themeType || '-'}</span></td>
+        <td><strong>${escapeHtml(t.name)}</strong></td>
+        <td><span class="tag-chip">${escapeHtml(t.themeType || '-')}</span></td>
         <td>${t.totalDuration ? t.totalDuration + '分钟' : '-'}</td>
         <td>${t.consumeLevel === 'high' ? '高端' : '经济'}</td>
         <td style="text-align:center">${t._segmentCount != null ? t._segmentCount : '-'}</td>
@@ -100,7 +100,10 @@ async function openEditTemplateModal(id) {
     }
 
     openModal('templateFormModal');
-  } catch (e) {}
+  } catch (e) {
+    console.error('加载模板详情失败:', e);
+    showToast('加载模板详情失败', 'error');
+  }
 }
 
 // ====== 动态添加/删除时段行 ======
@@ -117,10 +120,10 @@ function addSegmentRow(order, startTime, endTime, activityTypes, name) {
   div.dataset.idx = segmentCounter;
   div.innerHTML = `
     <input type="number" placeholder="序号" value="${order}" min="1" style="width:100%">
-    <input type="time" value="${startTime}" style="flex:1">
-    <input type="time" value="${endTime}" style="flex:1">
-    <input type="text" placeholder="名称" value="${name}" style="flex:2">
-    <input type="text" placeholder="活动类型(逗号分隔)" value="${activityTypes}" style="flex:2">
+    <input type="time" value="${escapeHtml(startTime)}" style="flex:1">
+    <input type="time" value="${escapeHtml(endTime)}" style="flex:1">
+    <input type="text" placeholder="名称" value="${escapeHtml(name)}" style="flex:2">
+    <input type="text" placeholder="活动类型(逗号分隔)" value="${escapeHtml(activityTypes)}" style="flex:2">
     <button type="button" class="btn btn-sm btn-link btn-link-danger" onclick="this.parentElement.remove()">×</button>`;
   document.getElementById('segmentList').appendChild(div);
 }
@@ -197,7 +200,7 @@ async function viewTemplateDetail(id) {
     } else {
       segHtml += '<table class="data-table" style="font-size:12px"><thead><tr><th>#</th><th>名称</th><th>开始</th><th>结束</th><th>允许类型</th></tr></thead><tbody>';
       for (const s of segments) {
-        segHtml += `<tr><td>${s.segmentOrder}</td><td>${s.segmentName}</td><td>${s.startTime}</td><td>${s.endTime}</td><td>${renderTags(s.activityTypes)}</td></tr>`;
+        segHtml += `<tr><td>${s.segmentOrder}</td><td>${escapeHtml(s.segmentName)}</td><td>${escapeHtml(s.startTime)}</td><td>${escapeHtml(s.endTime)}</td><td>${renderTags(s.activityTypes)}</td></tr>`;
       }
       segHtml += '</tbody></table>';
     }
@@ -206,9 +209,9 @@ async function viewTemplateDetail(id) {
     contentEl.innerHTML = `
       <div class="detail-grid" style="margin-bottom:16px">
         <div class="detail-label">ID</div><div class="detail-value">${tpl.id}</div>
-        <div class="detail-label">名称</div><div class="detail-value"><strong>${tpl.name}</strong></div>
-        <div class="detail-label">主题类型</div><div class="detail-value">${tpl.themeType || '-'}</div>
-        <div class="detail-label">描述</div><div class="detail-value">${tpl.description || '-'}</div>
+        <div class="detail-label">名称</div><div class="detail-value"><strong>${escapeHtml(tpl.name)}</strong></div>
+        <div class="detail-label">主题类型</div><div class="detail-value">${escapeHtml(tpl.themeType || '-')}</div>
+        <div class="detail-label">描述</div><div class="detail-value">${escapeHtml(tpl.description || '-')}</div>
         <div class="detail-label">总时长</div><div class="detail-value">${tpl.totalDuration ? tpl.totalDuration + '分钟' : '-'}</div>
         <div class="detail-label">消费水平</div><div class="detail-value">${tpl.consumeLevel === 'high' ? '高端' : '经济'}</div>
         <div class="detail-label">排序权重</div><div class="detail-value">${tpl.sortOrder ?? 0}</div>
@@ -217,7 +220,10 @@ async function viewTemplateDetail(id) {
       </div>
       ${segHtml}`;
     openModal('tplDetailModal');
-  } catch (e) {}
+  } catch (e) {
+    console.error('查看模板详情失败:', e);
+    showToast('加载模板详情失败', 'error');
+  }
 }
 
 // ====== 启用/禁用 ======

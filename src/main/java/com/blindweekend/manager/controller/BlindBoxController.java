@@ -33,8 +33,12 @@ public class BlindBoxController {
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) String status) {
-        return Result.success(blindBoxService.queryPage(pageNum, pageSize, keyword, status));
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String district,
+            @RequestParam(required = false) String timePeriod,
+            @RequestParam(required = false) String tags) {
+        return Result.success(blindBoxService.queryPage(pageNum, pageSize, keyword, status, city, district, timePeriod, tags));
     }
 
     /**
