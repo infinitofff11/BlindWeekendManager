@@ -48,8 +48,8 @@ function renderUserTable(users) {
         <td>${maskPhone(u.phone)}</td>
         <td>${escapeHtml(u.city || '-')}</td>
         <td>${renderStatusBadge(u.status)}</td>
-        <td style="font-size:12px;color:#888">${formatDate(u.createdAt)}</td>
-        <td style="font-size:12px;color:#888">${formatDateTime(u.lastLoginTime)}</td>
+        <td style="font-size:12px;color:#888">${formatDate(u.created_at)}</td>
+        <td style="font-size:12px;color:#888">${formatDateTime(u.last_login_time)}</td>
         <td><div class="action-btns">
           <button class="btn btn-sm btn-outline" onclick="viewUserDetail(${u.id})">详情</button>
           ${u.status === 1
@@ -69,10 +69,10 @@ async function viewUserDetail(id) {
       ['昵称', user.nickname],
       ['手机号', maskPhone(user.phone)],
       ['城市', user.city || '-'],
-      ['头像URL', user.avatarUrl || '-'],
+      ['头像URL', user.avatar_url || '-'],
       ['状态', user.status === 1 ? '正常' : '已禁用'],
-      ['注册时间', formatDateTime(user.createdAt)],
-      ['最后登录', formatDateTime(user.lastLoginTime)],
+      ['注册时间', formatDateTime(user.created_at)],
+      ['最后登录', formatDateTime(user.last_login_time)],
     ]);
   } catch (e) {
     console.error('加载用户详情失败:', e);

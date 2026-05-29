@@ -24,4 +24,10 @@ public interface TemplateSegmentMapper extends BaseMapper<TemplateSegment> {
      */
     @Select("SELECT * FROM template_segments WHERE template_id = #{templateId} ORDER BY segment_order ASC")
     java.util.List<com.blindweekend.manager.entity.TemplateSegment> selectByTemplateId(@Param("templateId") Long templateId);
+
+    /**
+     * 统计某模板的时段数量
+     */
+    @Select("SELECT COUNT(*) FROM template_segments WHERE template_id = #{templateId}")
+    Long countByTemplateId(@Param("templateId") Long templateId);
 }

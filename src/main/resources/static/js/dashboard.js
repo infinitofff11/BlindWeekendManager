@@ -28,7 +28,7 @@ async function loadAllStats() {
 
     if (userStats) {
       document.getElementById('userTotal').textContent = userStats.total || 0;
-      document.getElementById('todayUsers').textContent = userStats.todayNew || 0;
+      document.getElementById('todayUsers').textContent = userStats.today_new || 0;
     }
     if (spotStats) {
       document.getElementById('spotTotal').textContent = spotStats.total || 0;

@@ -49,6 +49,12 @@ public class PlanTemplateService {
                                              pageSize != null ? pageSize : 10);
         Page<PlanTemplate> result = planTemplateMapper.selectPage(page, wrapper);
 
+        // 填充每个模板的时段数量
+        for (PlanTemplate tpl : result.getRecords()) {
+            Long count = templateSegmentMapper.countByTemplateId(tpl.getId());
+            tpl.set_segmentCount(count != null ? count.intValue() : 0);
+        }
+
         return new PageResult<>(result.getCurrent(), result.getSize(),
                                 result.getTotal(), result.getRecords());
     }

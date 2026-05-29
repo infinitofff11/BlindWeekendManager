@@ -3,9 +3,11 @@ package com.blindweekend.manager.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.blindweekend.manager.common.BusinessException;
 import com.blindweekend.manager.dto.LoginDTO;
+import com.blindweekend.manager.dto.LoginResponse;
 import com.blindweekend.manager.dto.RegisterDTO;
 import com.blindweekend.manager.entity.User;
 import com.blindweekend.manager.mapper.UserMapper;
+import com.blindweekend.manager.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,11 +23,12 @@ import java.time.LocalDateTime;
 public class AuthService {
 
     private final UserMapper userMapper;
+    private final JwtUtil jwtUtil;
 
     /**
      * 用户注册
      */
-    public User register(RegisterDTO dto) {
+    public LoginResponse register(RegisterDTO dto) {
         // 1. 检查手机号是否已注册
         LambdaQueryWrapper<User> checkWrapper = new LambdaQueryWrapper<>();
         checkWrapper.eq(User::getPhone, dto.getPhone());
@@ -45,15 +48,19 @@ public class AuthService {
         userMapper.insert(user);
         log.info("用户注册成功: phone={}, nickname={}, id={}", dto.getPhone(), dto.getNickname(), user.getId());
 
-        // 3. 返回用户信息（脱敏）
+        // 3. 脱敏
         user.setPassword(null);
-        return user;
+
+        // 4. 生成 JWT Token（使用用户ID和昵称）
+        String token = jwtUtil.generateToken(user.getId(), user.getNickname() != null ? user.getNickname() : dto.getPhone());
+
+        return new LoginResponse(token, user);
     }
 
     /**
      * 用户登录
      */
-    public User login(LoginDTO dto) {
+    public LoginResponse login(LoginDTO dto) {
         // 1. 根据手机号查找用户
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getPhone, dto.getPhone());
@@ -81,8 +88,12 @@ public class AuthService {
 
         log.info("用户登录成功: phone={}, id={}", dto.getPhone(), user.getId());
 
-        // 5. 返回用户信息（脱敏）
+        // 5. 脱敏
         user.setPassword(null);
-        return user;
+
+        // 6. 生成 JWT Token（使用用户ID和昵称）
+        String token = jwtUtil.generateToken(user.getId(), user.getNickname() != null ? user.getNickname() : dto.getPhone());
+
+        return new LoginResponse(token, user);
     }
 }

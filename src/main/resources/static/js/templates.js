@@ -40,11 +40,11 @@ function renderTplTable(list) {
       <tr>
         <td>${t.id}</td>
         <td><strong>${escapeHtml(t.name)}</strong></td>
-        <td><span class="tag-chip">${escapeHtml(t.themeType || '-')}</span></td>
-        <td>${t.totalDuration ? t.totalDuration + '分钟' : '-'}</td>
-        <td>${t.consumeLevel === 'high' ? '高端' : '经济'}</td>
+        <td><span class="tag-chip">${escapeHtml(t.theme_type || '-')}</span></td>
+        <td>${t.total_duration ? t.total_duration + '分钟' : '-'}</td>
+        <td>${t.consume_level === 'high' ? '高端' : '经济'}</td>
         <td style="text-align:center">${t._segmentCount != null ? t._segmentCount : '-'}</td>
-        <td style="text-align:center">${t.sortOrder ?? 0}</td>
+        <td style="text-align:center">${t.sort_order ?? 0}</td>
         <td>${renderStatusBadge(t.status)}</td>
         <td><div class="action-btns">
           <button class="btn btn-sm btn-outline" onclick="viewTemplateDetail(${t.id})">详情</button>
@@ -83,10 +83,10 @@ async function openEditTemplateModal(id) {
     document.getElementById('tplFormTitle').textContent = '编辑方案模板';
 
     document.getElementById('tf_name').value = tpl.name || '';
-    document.getElementById('tf_themeType').value = tpl.themeType || '文艺';
-    document.getElementById('tf_totalDuration').value = tpl.totalDuration || '';
-    document.getElementById('tf_consumeLevel').value = tpl.consumeLevel || 'low';
-    document.getElementById('tf_sortOrder').value = tpl.sortOrder ?? 0;
+    document.getElementById('tf_themeType').value = tpl.theme_type || '文艺';
+    document.getElementById('tf_totalDuration').value = tpl.total_duration || '';
+    document.getElementById('tf_consumeLevel').value = tpl.consume_level || 'low';
+    document.getElementById('tf_sortOrder').value = tpl.sort_order ?? 0;
     document.getElementById('tf_description').value = tpl.description || '';
 
     // 填充时段
@@ -95,7 +95,7 @@ async function openEditTemplateModal(id) {
     if (segments.length === 0) { addSegmentRow(); addSegmentRow(); }
     else {
       for (const seg of segments) {
-        addSegmentRow(seg.segmentOrder, seg.startTime, seg.endTime, seg.activityTypes, seg.segmentName);
+        addSegmentRow(seg.segment_order, seg.start_time, seg.end_time, seg.activity_types, seg.segment_name);
       }
     }
 
@@ -146,11 +146,11 @@ function collectFormData() {
 
     if (!sName || !sStart || !sEnd) continue;
     segments.push({
-      segmentOrder: sOrder || segments.length + 1,
-      startTime: sStart,
-      endTime: sEnd,
-      segmentName: sName,
-      activityTypes: makeJsonArray(sTypes),
+      segment_order: sOrder || segments.length + 1,
+      start_time: sStart,
+      end_time: sEnd,
+      segment_name: sName,
+      activity_types: makeJsonArray(sTypes),
     });
   }
 
@@ -158,10 +158,10 @@ function collectFormData() {
 
   return {
     name,
-    themeType: document.getElementById('tf_themeType').value,
-    totalDuration: parseInt(document.getElementById('tf_totalDuration').value) || null,
-    consumeLevel: document.getElementById('tf_consumeLevel').value,
-    sortOrder: parseInt(document.getElementById('tf_sortOrder').value) || 0,
+    theme_type: document.getElementById('tf_themeType').value,
+    total_duration: parseInt(document.getElementById('tf_totalDuration').value) || null,
+    consume_level: document.getElementById('tf_consumeLevel').value,
+    sort_order: parseInt(document.getElementById('tf_sortOrder').value) || 0,
     description: document.getElementById('tf_description').value.trim(),
     segments,
   };
@@ -200,7 +200,7 @@ async function viewTemplateDetail(id) {
     } else {
       segHtml += '<table class="data-table" style="font-size:12px"><thead><tr><th>#</th><th>名称</th><th>开始</th><th>结束</th><th>允许类型</th></tr></thead><tbody>';
       for (const s of segments) {
-        segHtml += `<tr><td>${s.segmentOrder}</td><td>${escapeHtml(s.segmentName)}</td><td>${escapeHtml(s.startTime)}</td><td>${escapeHtml(s.endTime)}</td><td>${renderTags(s.activityTypes)}</td></tr>`;
+        segHtml += `<tr><td>${s.segment_order}</td><td>${escapeHtml(s.segment_name)}</td><td>${escapeHtml(s.start_time)}</td><td>${escapeHtml(s.end_time)}</td><td>${renderTags(s.activity_types)}</td></tr>`;
       }
       segHtml += '</tbody></table>';
     }
@@ -210,13 +210,13 @@ async function viewTemplateDetail(id) {
       <div class="detail-grid" style="margin-bottom:16px">
         <div class="detail-label">ID</div><div class="detail-value">${tpl.id}</div>
         <div class="detail-label">名称</div><div class="detail-value"><strong>${escapeHtml(tpl.name)}</strong></div>
-        <div class="detail-label">主题类型</div><div class="detail-value">${escapeHtml(tpl.themeType || '-')}</div>
+        <div class="detail-label">主题类型</div><div class="detail-value">${escapeHtml(tpl.theme_type || '-')}</div>
         <div class="detail-label">描述</div><div class="detail-value">${escapeHtml(tpl.description || '-')}</div>
-        <div class="detail-label">总时长</div><div class="detail-value">${tpl.totalDuration ? tpl.totalDuration + '分钟' : '-'}</div>
-        <div class="detail-label">消费水平</div><div class="detail-value">${tpl.consumeLevel === 'high' ? '高端' : '经济'}</div>
-        <div class="detail-label">排序权重</div><div class="detail-value">${tpl.sortOrder ?? 0}</div>
+        <div class="detail-label">总时长</div><div class="detail-value">${tpl.total_duration ? tpl.total_duration + '分钟' : '-'}</div>
+        <div class="detail-label">消费水平</div><div class="detail-value">${tpl.consume_level === 'high' ? '高端' : '经济'}</div>
+        <div class="detail-label">排序权重</div><div class="detail-value">${tpl.sort_order ?? 0}</div>
         <div class="detail-label">状态</div><div class="detail-value">${renderStatusBadge(tpl.status)}</div>
-        <div class="detail-label">创建时间</div><div class="detail-value">${formatDateTime(tpl.createdAt)}</div>
+        <div class="detail-label">创建时间</div><div class="detail-value">${formatDateTime(tpl.created_at)}</div>
       </div>
       ${segHtml}`;
     openModal('tplDetailModal');

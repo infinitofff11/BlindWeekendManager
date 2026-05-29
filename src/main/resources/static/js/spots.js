@@ -49,10 +49,10 @@ function renderSpotTable(spots) {
       <tr>
         <td>${s.id}</td>
         <td><strong>${escapeHtml(s.name)}</strong></td>
-        <td>${renderTags(s.typeTags)}</td>
+        <td>${renderTags(s.type_tags)}</td>
         <td>${escapeHtml(s.city || '-')}/${escapeHtml(s.district || '-')}</td>
-        <td>${s.consumePerPerson != null ? '¥' + s.consumePerPerson : '-'}</td>
-        <td>${s.recommendDuration ? s.recommendDuration + '分钟' : '-'}</td>
+        <td>${s.consume_per_person != null ? '¥' + s.consume_per_person : '-'}</td>
+        <td>${s.recommend_duration ? s.recommend_duration + '分钟' : '-'}</td>
         <td>${renderStatusBadge(s.status)}</td>
         <td><div class="action-btns">
           <button class="btn btn-sm btn-outline" onclick="viewSpotDetail(${s.id})">详情</button>
@@ -87,16 +87,16 @@ async function openEditSpotModal(id) {
     document.getElementById('sf_city').value = spot.city || '';
     document.getElementById('sf_district').value = spot.district || '';
     document.getElementById('sf_address').value = spot.address || '';
-    document.getElementById('sf_consumePerPerson').value = spot.consumePerPerson || '';
-    document.getElementById('sf_recommendDuration').value = spot.recommendDuration || '';
-    document.getElementById('sf_consumeLevel').value = spot.consumeLevel || 'low';
+    document.getElementById('sf_consumePerPerson').value = spot.consume_per_person || '';
+    document.getElementById('sf_recommendDuration').value = spot.recommend_duration || '';
+    document.getElementById('sf_consumeLevel').value = spot.consume_level || 'low';
     document.getElementById('sf_longitude').value = spot.longitude || '';
     document.getElementById('sf_latitude').value = spot.latitude || '';
-    document.getElementById('sf_suggestTimePeriod').value = spot.suggestTimePeriod || 'all_day';
-    document.getElementById('sf_suitableCapacity').value = spot.suitableCapacity || 'both';
+    document.getElementById('sf_suggestTimePeriod').value = spot.suggest_time_period || 'all_day';
+    document.getElementById('sf_suitableCapacity').value = spot.suitable_capacity || 'both';
     // typeTags JSON数组 → 逗号分隔友好显示
-    document.getElementById('sf_typeTags').value = jsonArrToCommaStr(spot.typeTags);
-    document.getElementById('sf_coverImageUrl').value = spot.coverImageUrl || '';
+    document.getElementById('sf_typeTags').value = jsonArrToCommaStr(spot.type_tags);
+    document.getElementById('sf_coverImageUrl').value = spot.cover_image_url || '';
     document.getElementById('sf_description').value = spot.description || '';
 
     openModal('spotFormModal');
@@ -118,15 +118,15 @@ async function saveSpot() {
     city: document.getElementById('sf_city').value.trim(),
     district: document.getElementById('sf_district').value.trim(),
     address,
-    consumePerPerson: parseFloat(document.getElementById('sf_consumePerPerson').value) || null,
-    recommendDuration: parseInt(document.getElementById('sf_recommendDuration').value) || null,
-    consumeLevel: document.getElementById('sf_consumeLevel').value,
+    consume_per_person: parseFloat(document.getElementById('sf_consumePerPerson').value) || null,
+    recommend_duration: parseInt(document.getElementById('sf_recommendDuration').value) || null,
+    consume_level: document.getElementById('sf_consumeLevel').value,
     longitude: parseFloat(document.getElementById('sf_longitude').value) || null,
     latitude: parseFloat(document.getElementById('sf_latitude').value) || null,
-    suggestTimePeriod: document.getElementById('sf_suggestTimePeriod').value,
-    suitableCapacity: document.getElementById('sf_suitableCapacity').value,
-    typeTags: makeJsonArray(document.getElementById('sf_typeTags').value.trim()),
-    coverImageUrl: document.getElementById('sf_coverImageUrl').value.trim(),
+    suggest_time_period: document.getElementById('sf_suggestTimePeriod').value,
+    suitable_capacity: document.getElementById('sf_suitableCapacity').value,
+    type_tags: makeJsonArray(document.getElementById('sf_typeTags').value.trim()),
+    cover_image_url: document.getElementById('sf_coverImageUrl').value.trim(),
     description: document.getElementById('sf_description').value.trim(),
   };
 
@@ -153,17 +153,17 @@ async function viewSpotDetail(id) {
       ['ID', s.id],
       ['名称', s.name],
       ['地址', `${s.city||''} ${s.district||''} ${s.address}`.trim()],
-      ['类型标签', renderTags(s.typeTags)],
-      ['人均消费', s.consumePerPerson != null ? '¥' + s.consumePerPerson : '-'],
-      ['推荐时长', s.recommendDuration ? s.recommendDuration + '分钟' : '-'],
-      ['消费水平', s.consumeLevel === 'high' ? '高端消费' : '经济实惠'],
-      ['建议时段', s.suggestTimePeriod || '-'],
-      ['适合人数', s.suitableCapacity || '-'],
+      ['类型标签', renderTags(s.type_tags)],
+      ['人均消费', s.consume_per_person != null ? '¥' + s.consume_per_person : '-'],
+      ['推荐时长', s.recommend_duration ? s.recommend_duration + '分钟' : '-'],
+      ['消费水平', s.consume_level === 'high' ? '高端消费' : '经济实惠'],
+      ['建议时段', s.suggest_time_period || '-'],
+      ['适合人数', s.suitable_capacity || '-'],
       ['坐标', (s.longitude && s.latitude) ? `${s.latitude}, ${s.longitude}` : '-'],
-      ['封面图', s.coverImageUrl || '-'],
+      ['封面图', s.cover_image_url || '-'],
       ['简介', s.description || '-'],
       ['状态', s.status === 1 ? '正常' : '已禁用'],
-      ['创建时间', formatDateTime(s.createdAt)],
+      ['创建时间', formatDateTime(s.created_at)],
     ]);
   } catch (e) {
     console.error('查看地点详情失败:', e);
