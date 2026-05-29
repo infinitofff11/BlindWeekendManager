@@ -97,10 +97,6 @@ public class SecurityConfig {
                     "/*.html"
                 ).permitAll()
 
-                // 公开接口：用户个人资料更新（Android 端 Bearer Token 认证，不需 ADMIN 角色）
-                .requestMatchers(HttpMethod.PUT, "/auth/profile").permitAll()
-                .requestMatchers(HttpMethod.POST, "/auth/profile/avatar").permitAll()
-
                 // 文件上传公开（图片资源需可直接访问）
                 .requestMatchers("/files/**").permitAll()
 

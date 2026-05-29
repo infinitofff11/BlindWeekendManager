@@ -172,11 +172,11 @@ async function saveBoxEdit() {
     title: document.getElementById('editBoxTitle').value.trim(),
     city: document.getElementById('editBoxCity').value.trim(),
     district: document.getElementById('editBoxDistrict').value.trim(),
-    mood_text: document.getElementById('editBoxMoodText').value.trim(),
-    activity_time_period: document.getElementById('editBoxTimePeriod').value.trim(),
-    required_count: parseInt(document.getElementById('editBoxRequiredCount').value) || 2,
+    moodText: document.getElementById('editBoxMoodText').value.trim(),
+    activityTimePeriod: document.getElementById('editBoxTimePeriod').value.trim(),
+    requiredCount: parseInt(document.getElementById('editBoxRequiredCount').value) || 2,
     status: document.getElementById('editBoxStatus').value,
-    activity_date: document.getElementById('editBoxActivityDate').value || null
+    activityDate: document.getElementById('editBoxActivityDate').value || null
   };
 
   if (!payload.title) {
