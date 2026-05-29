@@ -96,7 +96,7 @@ app:
   upload:
     path: ./uploads/
     # 文件访问URL前缀（局域网访问时改为本机IP）
-    access-url: https://267a3409.r2.cpolar.top/files/
+    access-url: http://10.213.212.236:8080/files/
 
   # JWT 认证配置
   jwt:

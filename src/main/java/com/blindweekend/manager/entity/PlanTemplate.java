@@ -1,7 +1,6 @@
 package com.blindweekend.manager.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import java.time.LocalDateTime;
 
@@ -41,9 +40,4 @@ public class PlanTemplate {
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedAt;
-
-    /** 时段数量（非数据库字段，查询时动态填充） */
-    @TableField(exist = false)
-    @JsonProperty("_segmentCount")
-    private Integer _segmentCount;
 }
