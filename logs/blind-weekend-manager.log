@@ -5886,3 +5886,158 @@ This generated password is for development use only. Your security configuration
 2026-05-29T23:34:41.812+08:00 DEBUG 23708 --- [blind-weekend-manager] [http-nio-8080-exec-5] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
 2026-05-29T23:39:57.213+08:00  INFO 23708 --- [blind-weekend-manager] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2026-05-29T23:39:57.220+08:00  INFO 23708 --- [blind-weekend-manager] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-05-29T23:39:59.433+08:00  INFO 12580 --- [blind-weekend-manager] [main] c.b.m.BlindWeekendManagerApplication     : Starting BlindWeekendManagerApplication using Java 17.0.11 with PID 12580 (D:\BlindWeekend\BlindWeekendManager\target\classes started by LocChen in D:\BlindWeekend\BlindWeekendManager)
+2026-05-29T23:39:59.434+08:00 DEBUG 12580 --- [blind-weekend-manager] [main] c.b.m.BlindWeekendManagerApplication     : Running with Spring Boot v3.2.5, Spring v6.1.6
+2026-05-29T23:39:59.434+08:00  INFO 12580 --- [blind-weekend-manager] [main] c.b.m.BlindWeekendManagerApplication     : No active profile set, falling back to 1 default profile: "default"
+2026-05-29T23:40:00.004+08:00  INFO 12580 --- [blind-weekend-manager] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-05-29T23:40:00.006+08:00  INFO 12580 --- [blind-weekend-manager] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-05-29T23:40:00.023+08:00  INFO 12580 --- [blind-weekend-manager] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 7 ms. Found 0 Redis repository interfaces.
+2026-05-29T23:40:00.479+08:00  INFO 12580 --- [blind-weekend-manager] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-05-29T23:40:00.488+08:00  INFO 12580 --- [blind-weekend-manager] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-29T23:40:00.488+08:00  INFO 12580 --- [blind-weekend-manager] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2026-05-29T23:40:00.542+08:00  INFO 12580 --- [blind-weekend-manager] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-29T23:40:00.542+08:00  INFO 12580 --- [blind-weekend-manager] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1074 ms
+2026-05-29T23:40:00.587+08:00 DEBUG 12580 --- [blind-weekend-manager] [main] c.b.m.config.JwtAuthenticationFilter     : Filter 'jwtAuthenticationFilter' configured for use
+2026-05-29T23:40:00.588+08:00 DEBUG 12580 --- [blind-weekend-manager] [main] c.b.manager.config.CsrfFilter            : Filter 'csrfFilter' configured for use
+2026-05-29T23:40:00.996+08:00  WARN 12580 --- [blind-weekend-manager] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 75f42848-958f-4a10-afa6-60a282e4f5fa
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-05-29T23:40:01.058+08:00  INFO 12580 --- [blind-weekend-manager] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-05-29T23:40:01.226+08:00  INFO 12580 --- [blind-weekend-manager] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@29fcfc54, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@353b0719, org.springframework.security.web.context.SecurityContextHolderFilter@33215ffb, org.springframework.security.web.header.HeaderWriterFilter@995ad50, org.springframework.web.filter.CorsFilter@2a4e939a, org.springframework.security.web.authentication.logout.LogoutFilter@915d7c4, com.blindweekend.manager.config.JwtAuthenticationFilter@149274cb, com.blindweekend.manager.config.CsrfFilter@5aa781f2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7c421952, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@350d26f3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@110620d, org.springframework.security.web.session.SessionManagementFilter@3f0c6b3c, org.springframework.security.web.access.ExceptionTranslationFilter@21280cbb, org.springframework.security.web.access.intercept.AuthorizationFilter@30358dc7]
+2026-05-29T23:40:01.629+08:00  INFO 12580 --- [blind-weekend-manager] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2026-05-29T23:40:01.635+08:00  INFO 12580 --- [blind-weekend-manager] [main] c.b.m.BlindWeekendManagerApplication     : Started BlindWeekendManagerApplication in 2.539 seconds (process running for 3.035)
+2026-05-29T23:40:25.069+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-29T23:40:25.070+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-29T23:40:25.071+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-05-29T23:40:25.224+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:25.397+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-4] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:25.408+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-5] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:25.681+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-2] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:25.880+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-10] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:25.888+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-3] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:26.060+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-7] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:26.062+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:26.384+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-29T23:40:26.569+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@56764748
+2026-05-29T23:40:26.570+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-29T23:40:31.615+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-9] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:31.626+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-9] c.b.manager.service.PlanTemplateService  : 模板详情: id=6, 时段数=3
+2026-05-29T23:40:39.326+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-6] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:41.681+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:42.319+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-6] c.b.manager.service.PlanTemplateService  : 保存时段配置: templateId=6, count=3
+2026-05-29T23:40:42.320+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-6] c.b.manager.service.PlanTemplateService  : 更新方案模板: id=6
+2026-05-29T23:40:42.337+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] c.b.manager.service.PlanTemplateService  : 保存时段配置: templateId=6, count=3
+2026-05-29T23:40:42.337+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] c.b.manager.service.PlanTemplateService  : 更新方案模板: id=6
+2026-05-29T23:40:42.511+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-4] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:42.863+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-5] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:51.417+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-2] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:51.421+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-2] c.b.manager.service.PlanTemplateService  : 模板详情: id=3, 时段数=3
+2026-05-29T23:40:55.770+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-10] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:55.783+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-10] c.b.manager.service.PlanTemplateService  : 保存时段配置: templateId=3, count=3
+2026-05-29T23:40:55.783+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-10] c.b.manager.service.PlanTemplateService  : 更新方案模板: id=3
+2026-05-29T23:40:55.967+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-3] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:58.078+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-7] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:40:58.084+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-7] c.b.manager.service.PlanTemplateService  : 模板详情: id=4, 时段数=3
+2026-05-29T23:41:02.233+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:02.254+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] c.b.manager.service.PlanTemplateService  : 保存时段配置: templateId=4, count=3
+2026-05-29T23:41:02.254+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] c.b.manager.service.PlanTemplateService  : 更新方案模板: id=4
+2026-05-29T23:41:02.380+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-9] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:03.750+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-6] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:03.759+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-6] c.b.manager.service.PlanTemplateService  : 模板详情: id=5, 时段数=3
+2026-05-29T23:41:08.170+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:08.192+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] c.b.manager.service.PlanTemplateService  : 保存时段配置: templateId=5, count=3
+2026-05-29T23:41:08.192+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] c.b.manager.service.PlanTemplateService  : 更新方案模板: id=5
+2026-05-29T23:41:08.352+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-4] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:11.431+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-5] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:11.437+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-5] c.b.manager.service.PlanTemplateService  : 模板详情: id=1, 时段数=3
+2026-05-29T23:41:18.935+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-2] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:18.941+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-10] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:18.962+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-2] c.b.manager.service.PlanTemplateService  : 保存时段配置: templateId=1, count=3
+2026-05-29T23:41:18.963+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-2] c.b.manager.service.PlanTemplateService  : 更新方案模板: id=1
+2026-05-29T23:41:18.974+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-10] c.b.manager.service.PlanTemplateService  : 保存时段配置: templateId=1, count=3
+2026-05-29T23:41:18.974+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-10] c.b.manager.service.PlanTemplateService  : 更新方案模板: id=1
+2026-05-29T23:41:19.119+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-3] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:19.541+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-7] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:23.239+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:23.243+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] c.b.manager.service.PlanTemplateService  : 模板详情: id=6, 时段数=3
+2026-05-29T23:41:32.291+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-4] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:32.305+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-4] c.b.manager.service.PlanTemplateService  : 保存时段配置: templateId=6, count=3
+2026-05-29T23:41:32.306+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-4] c.b.manager.service.PlanTemplateService  : 更新方案模板: id=6
+2026-05-29T23:41:32.431+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-5] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:35.023+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-2] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:35.028+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-2] c.b.manager.service.PlanTemplateService  : 模板详情: id=30, 时段数=3
+2026-05-29T23:41:38.467+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-10] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:38.481+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-10] c.b.manager.service.PlanTemplateService  : 保存时段配置: templateId=30, count=3
+2026-05-29T23:41:38.481+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-10] c.b.manager.service.PlanTemplateService  : 更新方案模板: id=30
+2026-05-29T23:41:38.618+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-3] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:40.864+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-7] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:40.869+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-7] c.b.manager.service.PlanTemplateService  : 模板详情: id=2, 时段数=4
+2026-05-29T23:41:44.543+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:44.558+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] c.b.manager.service.PlanTemplateService  : 保存时段配置: templateId=2, count=4
+2026-05-29T23:41:44.559+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] c.b.manager.service.PlanTemplateService  : 更新方案模板: id=2
+2026-05-29T23:41:44.693+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-9] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:47.008+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:47.012+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] c.b.manager.service.PlanTemplateService  : 模板详情: id=1, 时段数=3
+2026-05-29T23:41:50.409+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-6] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:50.423+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-6] c.b.manager.service.PlanTemplateService  : 保存时段配置: templateId=1, count=3
+2026-05-29T23:41:50.423+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-6] c.b.manager.service.PlanTemplateService  : 更新方案模板: id=1
+2026-05-29T23:41:50.544+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-4] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:52.064+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-5] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:52.069+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-5] c.b.manager.service.PlanTemplateService  : 模板详情: id=4, 时段数=3
+2026-05-29T23:41:55.709+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-2] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:55.729+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-2] c.b.manager.service.PlanTemplateService  : 保存时段配置: templateId=4, count=3
+2026-05-29T23:41:55.729+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-2] c.b.manager.service.PlanTemplateService  : 更新方案模板: id=4
+2026-05-29T23:41:55.853+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-10] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:57.373+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-3] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:41:57.377+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-3] c.b.manager.service.PlanTemplateService  : 模板详情: id=5, 时段数=3
+2026-05-29T23:42:00.385+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-7] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:42:00.399+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-7] c.b.manager.service.PlanTemplateService  : 保存时段配置: templateId=5, count=3
+2026-05-29T23:42:00.399+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-7] c.b.manager.service.PlanTemplateService  : 更新方案模板: id=5
+2026-05-29T23:42:00.514+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:42:03.676+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-9] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:42:03.680+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-9] c.b.manager.service.PlanTemplateService  : 模板详情: id=30, 时段数=3
+2026-05-29T23:42:14.779+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:42:14.798+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] c.b.manager.service.PlanTemplateService  : 保存时段配置: templateId=30, count=3
+2026-05-29T23:42:14.798+08:00  INFO 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] c.b.manager.service.PlanTemplateService  : 更新方案模板: id=30
+2026-05-29T23:42:14.916+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-6] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:42:17.850+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-4] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:42:17.860+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-4] c.b.manager.service.PlanTemplateService  : 模板详情: id=30, 时段数=3
+2026-05-29T23:42:21.660+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-2] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=admin
+2026-05-29T23:42:21.663+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-2] c.b.manager.service.PlanTemplateService  : 模板详情: id=30, 时段数=3
+2026-05-29T23:43:35.690+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-7] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:35.762+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:40.373+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:44.526+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-6] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:44.709+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-4] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:44.867+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-5] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:46.919+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-2] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:47.075+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-10] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:47.243+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-7] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:50.897+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:51.056+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-3] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:51.198+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-9] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:52.076+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:52.233+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-6] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:52.386+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-4] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:56.932+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-5] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:57.076+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-2] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:57.246+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-10] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:59.339+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-7] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:59.479+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:43:59.615+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-3] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:44:02.901+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-9] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:44:03.849+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:44:04.639+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-6] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:44:05.609+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-4] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:44:07.422+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-5] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:44:07.558+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-2] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:44:07.706+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-10] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:44:09.758+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-7] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:44:10.539+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-8] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:44:11.926+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-3] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:44:12.811+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-9] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:44:13.825+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-1] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
+2026-05-29T23:44:14.883+08:00 DEBUG 12580 --- [blind-weekend-manager] [http-nio-8080-exec-6] c.b.m.config.JwtAuthenticationFilter     : JWT认证成功: adminId=1, username=cs
