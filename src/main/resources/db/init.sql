@@ -31,7 +31,22 @@ CREATE TABLE IF NOT EXISTS users (
 ) ENGINE=InnoDB COMMENT='用户表';
 
 -- -----------------------------------------------------
--- 2. 用户偏好表
+-- 2. 管理员表
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS admin_users (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '管理员ID',
+    username VARCHAR(50) NOT NULL UNIQUE COMMENT '用户名',
+    password VARCHAR(100) NOT NULL COMMENT '密码(BCrypt加密)',
+    real_name VARCHAR(50) COMMENT '真实姓名',
+    role ENUM('super_admin', 'admin') DEFAULT 'admin' COMMENT '角色',
+    status TINYINT DEFAULT 1 COMMENT '状态: 1-正常, 0-禁用',
+    last_login_time DATETIME COMMENT '最后登录时间',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB COMMENT='管理员表';
+
+-- -----------------------------------------------------
+-- 3. 用户偏好表
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS user_preferences (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -45,7 +60,7 @@ CREATE TABLE IF NOT EXISTS user_preferences (
 ) ENGINE=InnoDB COMMENT='用户偏好表';
 
 -- -----------------------------------------------------
--- 3. 用户兴趣标签关联表
+-- 4. 用户兴趣标签关联表
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS user_interest_tags (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -56,7 +71,7 @@ CREATE TABLE IF NOT EXISTS user_interest_tags (
 ) ENGINE=InnoDB COMMENT='用户兴趣标签关联表';
 
 -- -----------------------------------------------------
--- 4. 活动点表（核心数据）
+-- 5. 活动点表（核心数据）
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS activity_spots (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '活动点ID',
@@ -83,7 +98,7 @@ CREATE TABLE IF NOT EXISTS activity_spots (
 ) ENGINE=InnoDB COMMENT='活动点表';
 
 -- -----------------------------------------------------
--- 5. 方案模板表
+-- 6. 方案模板表
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS plan_templates (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '模板ID',
@@ -99,7 +114,7 @@ CREATE TABLE IF NOT EXISTS plan_templates (
 ) ENGINE=InnoDB COMMENT='方案模板表';
 
 -- -----------------------------------------------------
--- 6. 模板时段配置表
+-- 7. 模板时段配置表
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS template_segments (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '时段ID',
@@ -115,7 +130,7 @@ CREATE TABLE IF NOT EXISTS template_segments (
 ) ENGINE=InnoDB COMMENT='模板时段配置表';
 
 -- -----------------------------------------------------
--- 7. 用户生成的方案表
+-- 8. 用户生成的方案表
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS user_plans (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '方案ID',
@@ -133,7 +148,7 @@ CREATE TABLE IF NOT EXISTS user_plans (
 ) ENGINE=InnoDB COMMENT='用户方案表';
 
 -- -----------------------------------------------------
--- 8. 方案环节明细表
+-- 9. 方案环节明细表
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS plan_items (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -149,7 +164,7 @@ CREATE TABLE IF NOT EXISTS plan_items (
 ) ENGINE=InnoDB COMMENT='方案环节明细表';
 
 -- -----------------------------------------------------
--- 9. 盲盒表
+-- 10. 盲盒表
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS blind_boxes (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '盲盒ID',
@@ -175,7 +190,7 @@ CREATE TABLE IF NOT EXISTS blind_boxes (
 ) ENGINE=InnoDB COMMENT='盲盒表';
 
 -- -----------------------------------------------------
--- 10. 盲盒组队申请表
+-- 11. 盲盒组队申请表
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS blind_box_applications (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -191,82 +206,7 @@ CREATE TABLE IF NOT EXISTS blind_box_applications (
     INDEX idx_blind_box (blind_box_id, status)
 ) ENGINE=InnoDB COMMENT='盲盒组队申请表';
 
--- -----------------------------------------------------
--- 11. 打卡记录表
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS check_ins (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    user_id BIGINT NOT NULL COMMENT '用户ID',
-    target_type ENUM('plan', 'blind_box') NOT NULL COMMENT '目标类型: 方案/盲盒',
-    target_id BIGINT NOT NULL COMMENT '目标ID(plan_id或blind_box_id)',
-    photo_urls JSON COMMENT '照片URL数组',
-    short_review VARCHAR(500) COMMENT '短评',
-    rating TINYINT COMMENT '评分1-5',
-    check_in_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '打卡时间',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    INDEX idx_user_checkin (user_id, check_in_time DESC)
-) ENGINE=InnoDB COMMENT='打卡记录表';
-
--- -----------------------------------------------------
--- 12. 评价表（独立管理用）
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS reviews (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    check_in_id BIGINT NOT NULL COMMENT '关联打卡记录ID',
-    spot_id BIGINT COMMENT '评价的活动点ID',
-    content VARCHAR(500) COMMENT '评价内容',
-    rating TINYINT NOT NULL COMMENT '评分1-5',
-    status TINYINT DEFAULT 1 COMMENT '状态: 1-正常, 0-屏蔽',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (check_in_id) REFERENCES check_ins(id),
-    INDEX idx_spot_rating (spot_id, rating)
-) ENGINE=InnoDB COMMENT='评价表';
-
--- -----------------------------------------------------
--- 13. 系统消息表
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS messages (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    receiver_id BIGINT NOT NULL COMMENT '接收者ID',
-    sender_id BIGINT COMMENT '发送者ID(系统消息为NULL)',
-    type ENUM('team_application', 'team_accepted', 'system', 'other') NOT NULL COMMENT '消息类型',
-    title VARCHAR(100) COMMENT '消息标题',
-    content TEXT NOT NULL COMMENT '消息内容',
-    related_id BIGINT COMMENT '关联业务ID(如盲盒ID)',
-    is_read TINYINT DEFAULT 0 COMMENT '是否已读',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (receiver_id) REFERENCES users(id),
-    INDEX idx_receiver_read (receiver_id, is_read, created_at DESC)
-) ENGINE=InnoDB COMMENT='系统消息表';
-
--- -----------------------------------------------------
--- 14. 成就/称号配置表
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS achievements (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(50) NOT NULL COMMENT '成就名称',
-    icon VARCHAR(50) COMMENT '图标标识',
-    description VARCHAR(200) COMMENT '描述',
-    condition_type VARCHAR(50) COMMENT '触发条件类型',
-    condition_value INT COMMENT '条件值(如打卡次数)',
-    sort_order INT DEFAULT 0
-) ENGINE=InnoDB COMMENT='成就配置表';
-
--- -----------------------------------------------------
--- 15. 用户成就关联表
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS user_achievements (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    user_id BIGINT NOT NULL,
-    achievement_id BIGINT NOT NULL,
-    unlocked_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (achievement_id) REFERENCES achievements(id),
-    UNIQUE KEY uk_user_achievement (user_id, achievement_id)
-) ENGINE=InnoDB COMMENT='用户成就关联表';
-
 -- =====================================================
--- ✅ 表结构初始化完成！共15张表
+-- ✅ 表结构初始化完成！共11张表
 -- 初始数据请运行: seed_data.sql
 -- =====================================================

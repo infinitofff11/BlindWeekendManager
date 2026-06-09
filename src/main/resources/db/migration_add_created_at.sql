@@ -12,7 +12,3 @@ ALTER TABLE template_segments
     ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
     AFTER segment_name;
 
--- 2. check_ins 表添加 created_at 列
-ALTER TABLE check_ins
-    ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
-    AFTER check_in_time;

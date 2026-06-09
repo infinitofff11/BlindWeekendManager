@@ -3,9 +3,11 @@ package com.blindweekend.manager.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.blindweekend.manager.common.BusinessException;
 import com.blindweekend.manager.dto.LoginDTO;
+import com.blindweekend.manager.dto.LoginResponse;
 import com.blindweekend.manager.dto.RegisterDTO;
 import com.blindweekend.manager.entity.User;
 import com.blindweekend.manager.mapper.UserMapper;
+import com.blindweekend.manager.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import java.time.LocalDateTime;
 public class AuthService {
 
     private final UserMapper userMapper;
+    private final JwtUtil jwtUtil;
 
     /**
      * 用户注册
@@ -53,7 +56,7 @@ public class AuthService {
     /**
      * 用户登录
      */
-    public User login(LoginDTO dto) {
+    public LoginResponse login(LoginDTO dto) {
         // 1. 根据手机号查找用户
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getPhone, dto.getPhone());
@@ -83,6 +86,8 @@ public class AuthService {
 
         // 5. 返回用户信息（脱敏）
         user.setPassword(null);
-        return user;
+        String token = jwtUtil.generateToken(user.getId(), user.getPhone());
+
+        return new LoginResponse(token, user);
     }
 }
