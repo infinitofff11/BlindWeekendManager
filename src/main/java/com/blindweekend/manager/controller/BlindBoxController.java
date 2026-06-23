@@ -3,12 +3,15 @@ package com.blindweekend.manager.controller;
 import com.blindweekend.manager.common.PageResult;
 import com.blindweekend.manager.common.Result;
 import com.blindweekend.manager.dto.BlindBoxCreateDTO;
+import com.blindweekend.manager.dto.BlindBoxDetailDTO;
 import com.blindweekend.manager.dto.BlindBoxUpdateDTO;
 import com.blindweekend.manager.entity.BlindBox;
 import com.blindweekend.manager.service.BlindBoxService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,11 +55,35 @@ public class BlindBoxController {
     }
 
     /**
-     * 获取盲盒详情
+     * 获取盲盒详情（含活动地点信息）
+     * 已参与/发布者可查看具体活动地点，其他用户只能看到大致区域
      */
     @GetMapping("/{id}")
-    public Result<BlindBox> detail(@PathVariable Long id) {
-        return Result.success(blindBoxService.getById(id));
+    public Result<BlindBoxDetailDTO> detail(@PathVariable Long id) {
+        Long currentUserId = getCurrentUserId();
+        return Result.success(blindBoxService.getDetail(id, currentUserId));
+    }
+
+    /**
+     * 从 SecurityContext 提取当前请求用户ID
+     * JwtAuthenticationFilter 将用户ID设置为 Authentication 的 principal
+     */
+    private Long getCurrentUserId() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.getPrincipal() instanceof Long) {
+                return (Long) authentication.getPrincipal();
+            }
+            if (authentication != null && authentication.getPrincipal() instanceof Integer) {
+                return ((Integer) authentication.getPrincipal()).longValue();
+            }
+            if (authentication != null && authentication.getPrincipal() instanceof String) {
+                return Long.parseLong((String) authentication.getPrincipal());
+            }
+        } catch (Exception e) {
+            log.debug("提取当前用户ID失败: {}", e.getMessage());
+        }
+        return null;
     }
 
     /**

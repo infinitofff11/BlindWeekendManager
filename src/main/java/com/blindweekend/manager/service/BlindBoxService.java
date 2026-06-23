@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blindweekend.manager.common.BusinessException;
 import com.blindweekend.manager.common.PageResult;
 import com.blindweekend.manager.dto.BlindBoxCreateDTO;
+import com.blindweekend.manager.dto.BlindBoxDetailDTO;
 import com.blindweekend.manager.dto.BlindBoxUpdateDTO;
+import com.blindweekend.manager.dto.PlanItemVO;
 import com.blindweekend.manager.entity.BlindBox;
 import com.blindweekend.manager.entity.BlindBoxApplication;
 import com.blindweekend.manager.mapper.BlindBoxApplicationMapper;
@@ -168,6 +170,51 @@ public class BlindBoxService {
         blindBoxMapper.incrementViewCount(id);
         box.setViewCount((box.getViewCount() == null ? 0 : box.getViewCount()) + 1);
         return box;
+    }
+
+    /**
+     * 获取盲盒详情（含方案环节/活动地点信息）
+     * 权限控制：只有发布者或已参与（申请被接受）的用户才能看到具体活动地点
+     *
+     * @param blindBoxId 盲盒ID
+     * @param currentUserId 当前请求用户ID，可为null（未登录）
+     */
+    public BlindBoxDetailDTO getDetail(Long blindBoxId, Long currentUserId) {
+        BlindBox box = blindBoxMapper.selectById(blindBoxId);
+        if (box == null) {
+            throw new BusinessException("盲盒不存在");
+        }
+        // 浏览量 +1
+        blindBoxMapper.incrementViewCount(blindBoxId);
+        box.setViewCount((box.getViewCount() == null ? 0 : box.getViewCount()) + 1);
+
+        BlindBoxDetailDTO dto = new BlindBoxDetailDTO(box);
+
+        // 判断当前用户身份
+        boolean isPublisher = currentUserId != null && currentUserId.equals(box.getPublisherId());
+        boolean isAccepted = false;
+
+        if (currentUserId != null && !isPublisher) {
+            // 检查用户是否已参与（申请被接受）
+            LambdaQueryWrapper<BlindBoxApplication> appWrapper = new LambdaQueryWrapper<>();
+            appWrapper.eq(BlindBoxApplication::getBlindBoxId, blindBoxId)
+                       .eq(BlindBoxApplication::getApplicantId, currentUserId)
+                       .eq(BlindBoxApplication::getStatus, "accepted");
+            Long acceptedCount = applicationMapper.selectCount(appWrapper);
+            isAccepted = acceptedCount != null && acceptedCount > 0;
+        }
+
+        dto.setPublisher(isPublisher);
+        dto.setParticipated(isAccepted);
+
+        // 只有发布者或已参与用户才能看到具体活动地点
+        if ((isPublisher || isAccepted) && box.getPlanId() != null) {
+            List<PlanItemVO> planItems = blindBoxMapper.findPlanItemsByPlanId(box.getPlanId());
+            dto.setPlanItems(planItems != null ? planItems : List.of());
+            log.info("用户{}查看盲盒{}的活动地点，共{}个环节", currentUserId, blindBoxId, planItems != null ? planItems.size() : 0);
+        }
+
+        return dto;
     }
 
     /**
